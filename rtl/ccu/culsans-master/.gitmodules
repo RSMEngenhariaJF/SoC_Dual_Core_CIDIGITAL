@@ -1,0 +1,15 @@
+[submodule "modules/cva6"]
+	path = modules/cva6
+	url = git@github.com:planvtech/cva6.git
+[submodule "tests/integration/testlist/cva6-litmus"]
+	path = tests/litmus/litmus_src
+	url = git@github.com:planvtech/cva6-litmus.git
+[submodule "tests/litmus/litmus_src"]
+	path = tests/litmus/litmus_src
+	url = git@github.com:planvtech/cva6-litmus.git
+[submodule "modules/axi_llc"]
+	path = modules/axi_llc
+	url = git@github.com:planvtech/axi_llc.git
+[submodule "cva6-sdk"]
+	path = cva6-sdk
+	url = git@github.com:planvtech/cva6-sdk.git

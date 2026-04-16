@@ -1,0 +1,300 @@
+// Cache Coherency Unit (CCU)
+// Handles coherency transactions between ACE masters and slaves
+// Implements MOESI cache coherency protocol
+
+`include "axi4_defines.sv"
+
+module ccu #(
+    parameter NUM_MASTERS    = 2,
+    parameter AXI_ID_WIDTH   = 4,
+    parameter AXI_ADDR_WIDTH = 32,
+    parameter AXI_DATA_WIDTH = 64,
+    parameter AXI_USER_WIDTH = 4
+) (
+    input  logic                         clk,
+    input  logic                         rst_n,
+    
+    // ACE Master Interfaces (from cores)
+    ace_bus.slave                        ace_master [NUM_MASTERS],
+    
+    // ACE Slave Interface (to LLC/memory)
+    ace_bus.master                       ace_slave,
+    
+    // Snoop propagation for other masters
+    ace_bus.master                       snoop_out [NUM_MASTERS]
+);
+
+    // Internal signals
+    logic [NUM_MASTERS-1:0]              arb_req;
+    logic [NUM_MASTERS-1:0]              arb_gnt;
+    logic [$clog2(NUM_MASTERS)-1:0]      curr_master;
+    
+    // Coherency table for tracking cache states
+    logic [63:0]                         coherency_table [0:255];  // Tracks cache line states
+    logic [NUM_MASTERS-1:0]              cache_valid;
+    logic [NUM_MASTERS-1:0]              cache_dirty;
+    
+    // ===== Arbitration =====
+    always_comb begin
+        arb_req = 0;
+        for (int i = 0; i < NUM_MASTERS; i++) begin
+            if (ace_master[i].awvalid || ace_master[i].arvalid) begin
+                arb_req[i] = 1'b1;
+            end
+        end
+    end
+    
+    // Priority arbiter (Core 0 has priority)
+    always_comb begin
+        arb_gnt = 0;
+        for (int i = 0; i < NUM_MASTERS; i++) begin
+            if (arb_req[i]) begin
+                arb_gnt[i] = 1'b1;
+                break;
+            end
+        end
+    end
+    
+    always_ff @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            curr_master <= '0;
+        end else begin
+            for (int i = 0; i < NUM_MASTERS; i++) begin
+                if (arb_gnt[i]) begin
+                    curr_master <= i;
+                    break;
+                end
+            end
+        end
+    end
+    
+    // ===== Write Address Handling =====
+    logic                                aw_collision;
+    logic                                aw_need_snoop;
+    
+    always_comb begin
+        aw_collision = 1'b0;
+        aw_need_snoop = 1'b0;
+        
+        // Check if write address matches cached line in another master
+        for (int i = 0; i < NUM_MASTERS; i++) begin
+            if (i != curr_master && cache_valid[i]) begin
+                aw_collision = 1'b1;
+                aw_need_snoop = 1'b1;
+            end
+        end
+    end
+    
+    // ===== Read Address Handling =====
+    logic                                ar_collision;
+    logic                                ar_need_snoop;
+    
+    always_comb begin
+        ar_collision = 1'b0;
+        ar_need_snoop = 1'b0;
+        
+        // Check if read address matches cached line in another master
+        for (int i = 0; i < NUM_MASTERS; i++) begin
+            if (i != curr_master && cache_valid[i] && cache_dirty[i]) begin
+                ar_collision = 1'b1;
+                ar_need_snoop = 1'b1;
+            end
+        end
+    end
+    
+    // ===== Snoop Broadcasting =====
+    // When a transaction needs coherency
+    always_comb begin
+        for (int i = 0; i < NUM_MASTERS; i++) begin
+            snoop_out[i].acvalid = 1'b0;
+            snoop_out[i].acsnoop = `ACE_SNOOP_CLEANINVALID;
+            
+            // Broadcast snoop to all other masters
+            if (i != curr_master) begin
+                if (ace_master[curr_master].awvalid && aw_need_snoop) begin
+                    snoop_out[i].acvalid = 1'b1;
+                    snoop_out[i].acsnoop = `ACE_SNOOP_CLEANINVALID;
+                    snoop_out[i].acaddr  = ace_master[curr_master].awaddr;
+                    snoop_out[i].acdomain = ace_master[curr_master].awdomain;
+                end else if (ace_master[curr_master].arvalid && ar_need_snoop) begin
+                    snoop_out[i].acvalid = 1'b1;
+                    snoop_out[i].acsnoop = `ACE_SNOOP_READSHARED;
+                    snoop_out[i].acaddr  = ace_master[curr_master].araddr;
+                    snoop_out[i].acdomain = ace_master[curr_master].ardomain;
+                end
+            end
+        end
+    end
+    
+    // ===== Write Address Channel Routing =====
+    always_comb begin
+        // Default: all ready signals are low
+        for (int i = 0; i < NUM_MASTERS; i++) begin
+            ace_master[i].awready = 1'b0;
+        end
+        
+        // Route to slave when arbitrator grants access
+        ace_slave.awid      = ace_master[curr_master].awid;
+        ace_slave.awaddr    = ace_master[curr_master].awaddr;
+        ace_slave.awlen     = ace_master[curr_master].awlen;
+        ace_slave.awsize    = ace_master[curr_master].awsize;
+        ace_slave.awburst   = ace_master[curr_master].awburst;
+        ace_slave.awuser    = ace_master[curr_master].awuser;
+        ace_slave.awsnoop   = ace_master[curr_master].awsnoop;
+        ace_slave.awdomain  = ace_master[curr_master].awdomain;
+        ace_slave.awcache   = ace_master[curr_master].awcache;
+        ace_slave.awlock    = ace_master[curr_master].awlock;
+        ace_slave.awbar     = ace_master[curr_master].awbar;
+        
+        if (arb_gnt[curr_master] && ace_master[curr_master].awvalid) begin
+            ace_slave.awvalid = 1'b1;
+            ace_master[curr_master].awready = ace_slave.awready;
+        end else begin
+            ace_slave.awvalid = 1'b0;
+        end
+    end
+    
+    // ===== Write Data Channel Routing =====
+    logic [$clog2(NUM_MASTERS)-1:0]    wr_master_id;
+    
+    always_ff @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            wr_master_id <= '0;
+        end else if (ace_slave.awvalid && ace_slave.awready) begin
+            wr_master_id <= curr_master;
+        end
+    end
+    
+    always_comb begin
+        for (int i = 0; i < NUM_MASTERS; i++) begin
+            ace_master[i].wready = 1'b0;
+        end
+        
+        ace_slave.wdata     = ace_master[wr_master_id].wdata;
+        ace_slave.wstrb     = ace_master[wr_master_id].wstrb;
+        ace_slave.wlast     = ace_master[wr_master_id].wlast;
+        
+        if (ace_master[wr_master_id].wvalid) begin
+            ace_slave.wvalid = 1'b1;
+            ace_master[wr_master_id].wready = ace_slave.wready;
+        end else begin
+            ace_slave.wvalid = 1'b0;
+        end
+    end
+    
+    // ===== Write Response Channel Routing =====
+    always_comb begin
+        for (int i = 0; i < NUM_MASTERS; i++) begin
+            ace_master[i].bvalid = 1'b0;
+            ace_master[i].bid    = '0;
+            ace_master[i].bresp  = '0;
+            ace_master[i].buser  = '0;
+        end
+        
+        if (ace_slave.bvalid) begin
+            for (int i = 0; i < NUM_MASTERS; i++) begin
+                if (i == ace_slave.bid[$clog2(NUM_MASTERS)-1:0]) begin
+                    ace_master[i].bvalid = 1'b1;
+                    ace_master[i].bid    = ace_slave.bid;
+                    ace_master[i].bresp  = ace_slave.bresp;
+                    ace_master[i].buser  = ace_slave.buser;
+                end
+            end
+            ace_slave.bready = ace_master[ace_slave.bid[$clog2(NUM_MASTERS)-1:0]].bready;
+        end else begin
+            ace_slave.bready = 1'b0;
+        end
+    end
+    
+    // ===== Read Address Channel Routing =====
+    always_comb begin
+        for (int i = 0; i < NUM_MASTERS; i++) begin
+            ace_master[i].arready = 1'b0;
+        end
+        
+        ace_slave.arid      = ace_master[curr_master].arid;
+        ace_slave.araddr    = ace_master[curr_master].araddr;
+        ace_slave.arlen     = ace_master[curr_master].arlen;
+        ace_slave.arsize    = ace_master[curr_master].arsize;
+        ace_slave.arburst   = ace_master[curr_master].arburst;
+        ace_slave.aruser    = ace_master[curr_master].aruser;
+        ace_slave.arsnoop   = ace_master[curr_master].arsnoop;
+        ace_slave.ardomain  = ace_master[curr_master].ardomain;
+        ace_slave.arcache   = ace_master[curr_master].arcache;
+        ace_slave.arlock    = ace_master[curr_master].arlock;
+        ace_slave.arbar     = ace_master[curr_master].arbar;
+        
+        if (arb_gnt[curr_master] && ace_master[curr_master].arvalid) begin
+            ace_slave.arvalid = 1'b1;
+            ace_master[curr_master].arready = ace_slave.arready;
+        end else begin
+            ace_slave.arvalid = 1'b0;
+        end
+    end
+    
+    // ===== Read Data Channel Routing =====
+    always_comb begin
+        for (int i = 0; i < NUM_MASTERS; i++) begin
+            ace_master[i].rvalid   = 1'b0;
+            ace_master[i].rid      = '0;
+            ace_master[i].rdata    = '0;
+            ace_master[i].rresp    = '0;
+            ace_master[i].rlast    = 1'b0;
+            ace_master[i].ruser    = '0;
+            ace_master[i].rcrresp  = '0;
+            ace_master[i].racvalid = 1'b0;
+        end
+        
+        if (ace_slave.rvalid) begin
+            for (int i = 0; i < NUM_MASTERS; i++) begin
+                if (i == ace_slave.rid[$clog2(NUM_MASTERS)-1:0]) begin
+                    ace_master[i].rvalid   = 1'b1;
+                    ace_master[i].rid      = ace_slave.rid;
+                    ace_master[i].rdata    = ace_slave.rdata;
+                    ace_master[i].rresp    = ace_slave.rresp;
+                    ace_master[i].rlast    = ace_slave.rlast;
+                    ace_master[i].ruser    = ace_slave.ruser;
+                    ace_master[i].rcrresp  = ace_slave.rcrresp;
+                    ace_master[i].racvalid = ace_slave.racvalid;
+                end
+            end
+            ace_slave.rready = ace_master[ace_slave.rid[$clog2(NUM_MASTERS)-1:0]].rready;
+        end else begin
+            ace_slave.rready = 1'b0;
+        end
+    end
+    
+    // ===== Snoop Channel Handling =====
+    // Process snoop requests from LLC
+    always_comb begin
+        for (int i = 0; i < NUM_MASTERS; i++) begin
+            ace_master[i].acvalid   = snoop_out[i].acvalid;
+            ace_master[i].acaddr    = snoop_out[i].acaddr;
+            ace_master[i].acsnoop   = snoop_out[i].acsnoop;
+            ace_master[i].acdomain  = snoop_out[i].acdomain;
+            snoop_out[i].acready    = ace_master[i].acready;
+        end
+    end
+    
+    // Collect snoop responses from cores and forward to LLC
+    always_comb begin
+        for (int i = 0; i < NUM_MASTERS; i++) begin
+            ace_slave.crvalid = ace_master[i].crvalid;
+            ace_slave.crresp  = ace_master[i].crresp;
+            ace_slave.crid    = {ace_master[i].crid[$clog2(NUM_MASTERS)-1:0], i[$clog2(NUM_MASTERS)-1:0]};
+            ace_master[i].crready = ace_slave.crready;
+        end
+    end
+    
+    // Collect snoop data and forward to LLC
+    always_comb begin
+        for (int i = 0; i < NUM_MASTERS; i++) begin
+            ace_slave.cdvalid = ace_master[i].cdvalid;
+            ace_slave.cddata  = ace_master[i].cddata;
+            ace_slave.cdlast  = ace_master[i].cdlast;
+            ace_slave.cdid    = {ace_master[i].cdid[$clog2(NUM_MASTERS)-1:0], i[$clog2(NUM_MASTERS)-1:0]};
+            ace_master[i].cdready = ace_slave.cdready;
+        end
+    end
+
+endmodule
