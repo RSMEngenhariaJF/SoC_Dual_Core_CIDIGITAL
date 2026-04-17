@@ -1,0 +1,65 @@
+# Program HEX - Teste de Execução Dual-Core CVA6
+# Este programa demonstra execução paralela em 2 cores
+
+# Programa simples: cada core incrementa um registrador e escreve em memória
+# Core 0: incrementa x5 (a5) 100 vezes, escreve em 0x80000000
+# Core 1: incrementa x6 (a6) 100 vezes, escreve em 0x80000100
+
+# RISC-V Assembly (32-bit):
+# Core 0 entry: 0x80000000
+# Core 1 entry: 0x80000100
+
+# ===================================================================
+# CORE 0 PROGRAM (starts at 0x80000000)
+# ===================================================================
+# li x5, 0          # x5 = 0 (counter)
+93 02 00 00
+
+# li x10, 0x80000000  # x10 = base address for core0 writes
+b7 05 00 80
+93 85 05 00
+
+# loop0:
+# addi x5, x5, 1    # x5++
+93 a2 02 00
+
+# sw x5, 0(x10)     # memory[x10] = x5
+23 20 05 00
+
+# addi x10, x10, 4  # x10 += 4 (next address)
+93 85 05 04
+
+# bne x5, x6, loop0 # if x5 != 100, loop (x6 = 100)
+e3 98 a5 fe
+
+# j end0            # jump to end
+6f 00 00 00
+
+# ===================================================================
+# CORE 1 PROGRAM (starts at 0x80000100)
+# ===================================================================
+# li x6, 0          # x6 = 0 (counter)
+b3 03 00 00
+
+# li x11, 0x80000100 # x11 = base address for core1 writes
+b7 05 00 80
+93 85 05 01
+
+# loop1:
+# addi x6, x6, 1    # x6++
+93 83 03 00
+
+# sw x6, 0(x11)     # memory[x11] = x6
+23 20 06 00
+
+# addi x11, x11, 4  # x11 += 4 (next address)
+93 85 06 04
+
+# bne x6, x7, loop1 # if x6 != 100, loop (x7 = 100)
+e3 98 b6 fe
+
+# j end1            # jump to end
+6f 00 00 00
+
+# end0/end1: halt (infinite loop)
+6f f0 df ff
