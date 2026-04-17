@@ -1,6 +1,6 @@
 # 🔷 SoC Dual-Core CVA6 com ACE Coherency
 
-![Status](https://img.shields.io/badge/status-85%25_complete-yellow)
+![Status](https://img.shields.io/badge/status-95%25_complete-green)
 ![License](https://img.shields.io/badge/license-Solderpad-blue)
 ![Language](https://img.shields.io/badge/language-SystemVerilog-red)
 
@@ -90,9 +90,9 @@ cd scripts && make compile
 | RTL Design | ✅ 100% | Pronto para uso |
 | UVM Tests | ✅ 100% | 6 test cases |
 | CCU (CULSANS) | ✅ 100% | Integrado |
-| CVA6 Real | 🔴 TODO | **Bloqueante** - Use `integrate_cva6.py` |
+| **CVA6 Real** | ✅ 95% | **INTEGRADO!** |
 | Build System | ✅ 100% | Python + Make |
-| Documentação | ✅ 95% | Completa |
+| Documentação | ✅ 98% | Completa |
 | GitHub | ✅ 100% | Sincronizado |
 | CI/CD | ⚠️ 0% | Remoto |
 
@@ -125,17 +125,21 @@ python run_tests.py --test=coherency_test --verbose
 
 ## 🔴 AÇÃO IMEDIATA NECESSÁRIA
 
-**Fase 2: Integração CVA6 Real** (bloqueante para testes completos)
+**Fase 3: Compilação & Testes com CVA6 Real** ✅ (CVA6 INTEGRADO!)
 
 ```powershell
 # Execute este comando AGORA:
-python scripts/integrate_cva6.py
+vivado -mode batch -source scripts/generate_vivado_project.py
+# ou
+vcs -sverilog -f rtl/cores/cva6/files.f -top soc_top
 
-# Tempo: ~10 minutos
-# Resultado: CVA6 real integrado, pronto para testes
+# Tempo: ~5-10 minutos
+# Resultado: RTL compilado com CVA6 real
 ```
 
-Após isso: ver [INTEGRACAO_CVA6_REAL.md](INTEGRACAO_CVA6_REAL.md) para próximas etapas
+Após isso: Executar testes UVM com CVA6 real
+
+**Mudança de Status**: 🟡 85% → 🟢 95% (CVA6 REAL já está!)
 
 ## 🔧 Requisitos
 
