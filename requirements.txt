@@ -1,0 +1,26 @@
+# Python Requirements for SoC Dual-Core CVA6 Project
+# Install with: pip install -r requirements.txt
+
+# Project management
+gitpython==3.1.40
+
+# Testing and validation
+pytest==7.4.4
+pytest-cov==4.1.0
+
+# Utilities
+pyyaml==6.0.1
+pathlib2==2.3.7
+
+# Optional: for advanced simulation analysis
+pandas==2.1.4
+numpy==1.24.3
+matplotlib==3.8.3
+
+# Code analysis
+pylint==3.0.4
+black==24.1.1
+
+# Documentation
+markdown==3.5.2
+sphinx==7.2.6

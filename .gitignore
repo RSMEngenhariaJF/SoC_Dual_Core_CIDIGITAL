@@ -1,0 +1,58 @@
+# Ignore generated files and directories
+*.vcd
+*.vpd
+*.wdb
+*.vvp
+obj_dir/
+sim/output/
+syn/output/
+
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swp~
+*.bak
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Build artifacts
+*.o
+*.so
+*.a
+*.d
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Vivado
+.vivado/
+*.jou
+*.str
+.Xil/
+vivado_pid*.str
+
+# Simulation
+xsim.key
+xsim.pb
+xvhdl.pb
+xvlog.pb
+
+# Temporary files
+.tmp/
+temp/
+*.tmp
+
+# Documentation build
+docs/_build/
+site/
