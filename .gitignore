@@ -7,6 +7,11 @@
 build/*
 !build/.keep
 
+# Dual-core CVA6 Vivado simulation project
+!build/dual_core_cva6/
+build/dual_core_cva6/work/
+build/dual_core_cva6/tb/vivado_proj/
+
 # Ignore generated logs from back-end
 # Good for 10 levels of hierarchy
 piton/design/*/synopsys/*
