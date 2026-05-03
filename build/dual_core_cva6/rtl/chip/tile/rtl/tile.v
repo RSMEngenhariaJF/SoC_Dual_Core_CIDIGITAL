@@ -919,7 +919,7 @@ if (TILE_TYPE == `ARIANE_RV64_TILE) begin : g_ariane_core
                                     ~transducer_l15_invalidate_cacheline) ? `MSG_DATA_SIZE_32B : `MSG_DATA_SIZE_16B; 
 
     wire [63:0] ariane_bootaddr;
-
+    assign ariane_bootaddr = 64'h8000_0000; // DRAMBase: reset vector for CVA6 in OpenPiton
 
 
 
@@ -928,12 +928,12 @@ if (TILE_TYPE == `ARIANE_RV64_TILE) begin : g_ariane_core
         .NrPMPEntries           ( 4    ),
         .DmBaseAddress          ( 64'h0 ),
         .SwapEndianess          ( 1'b1 ),
-        .NrExecuteRegionRules   ( 0   ),
-        .ExecuteRegionAddrBase  ( '0  ),
-        .ExecuteRegionLength    ( '0  ),
+        .NrExecuteRegionRules   ( 1   ),
+        .ExecuteRegionAddrBase  ( {64'h8000_0000} ),
+        .ExecuteRegionLength    ( {64'h4000_0000} ),
         .NrCachedRegionRules    (  1   ),
-        .CachedRegionAddrBase   ( {64'h0} ),
-        .CachedRegionLength     ( {64'h0} )
+        .CachedRegionAddrBase   ( {64'h8000_0000} ),
+        .CachedRegionLength     ( {64'h4000_0000} )
 
     ) core (
         .clk_i       ( clk_gated              ),

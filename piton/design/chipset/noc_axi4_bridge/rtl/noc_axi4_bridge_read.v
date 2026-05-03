@@ -156,8 +156,9 @@ reg [6:0] size[`NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT-1:0];
 reg [5:0] offset[`NOC_AXI4_BRIDGE_IN_FLIGHT_LIMIT-1:0];
 reg [`NOC_AXI4_BRIDGE_BUFFER_ADDR_SIZE-1:0] resp_id_f;
 wire resp_go;
-wire uncacheable = (virt_addr[`PHY_ADDR_WIDTH-1]) 
-                || (req_header_f[`MSG_TYPE] == `MSG_TYPE_NC_LOAD_REQ);
+wire uncacheable = (virt_addr[`PHY_ADDR_WIDTH-1])
+                || (req_header_f[`MSG_TYPE] == `MSG_TYPE_NC_LOAD_REQ)
+                || (req_header_f[`MSG_TYPE] == `MSG_TYPE_LOAD_REQ);
 
 generate begin
     genvar i;

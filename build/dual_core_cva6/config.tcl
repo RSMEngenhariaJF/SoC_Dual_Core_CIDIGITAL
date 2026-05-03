@@ -45,21 +45,27 @@ set XVLOG_DEFINES [list \
     "--define" "PITON_RV64_CLINT"       \
     "--define" "PITON_RV64_DEBUGUNIT"   \
     "--define" "XSIM"                   \
+    "--define" "PITON_NO_CHIP_BRIDGE"   \
+    "--define" "VC707_BOARD"            \
 ]
 
 
 # ================== Include dirs extras =====================
 set XVLOG_INC_DIRS [list \
-    "--include" "$INC_DIR"                                        \
-    "--include" "$DESIGN/include"                                 \
-    "--include" "$ARIANE/common/local/util"                      \
-    "--include" "$ARIANE/common/submodules/common_cells/include" \
-    "--include" "$ARIANE/corev_apu/register_interface/include"   \
+    "--include" "$INC_DIR"                                                              \
+    "--include" "$DESIGN/include"                                                       \
+    "--include" "$ARIANE/common/local/util"                                             \
+    "--include" "$ARIANE/common/submodules/common_cells/include"                        \
+    "--include" "$ARIANE/corev_apu/register_interface/include"                         \
+    "--include" "$PITON_DIR/piton/design/chipset/include"                              \
+    "--include" "$PITON_DIR/piton/design/chipset/noc_axi4_bridge/rtl"                 \
 ]
 
 
 # ================== TOP do testbench ========================
-set TOP_NAME "tb_dual_core_cva6"
+# tb_soc_dual_core : chip.v como DUT + noc_axi4_bridge + AXI4 SRAM (UVM-ready)
+# tb_dual_core_cva6: testbench original (tiles diretos, sem memória)
+set TOP_NAME "tb_soc_dual_core"
 
 
 # ================== Arquivos RTL (DUT) ======================
@@ -364,11 +370,39 @@ lappend XVLOG_RTL_FILES \
     "$RTL_PATHS/common/rtl/noc_prio_merger.v"    \
     "$RTL_PATHS/common/rtl/bram_sdp_wrapper.v"
 
+# --- 6. chip.v top-level + módulos de suporte ---
+lappend XVLOG_RTL_FILES \
+    "$PITON_DIR/piton/design/chip/rtl/OCI.v"              \
+    "$PITON_DIR/piton/design/chip/pll/rtl/clk_se_to_diff.v" \
+    "$PITON_DIR/piton/design/chip/pll/rtl/clk_mux.v"     \
+    "$PITON_DIR/piton/design/chip/jtag/rtl/jtag_ucb_receiver.v"   \
+    "$PITON_DIR/piton/design/chip/jtag/rtl/jtag_ucb_transmitter.v" \
+    "$PITON_DIR/piton/design/chip/jtag/rtl/jtag_interface_tap.v"  \
+    "$PITON_DIR/piton/design/chip/jtag/rtl/jtag_interface.v"      \
+    "$PITON_DIR/piton/design/chip/jtag/rtl/jtag_ctap.v"           \
+    "$PITON_DIR/piton/design/chip/jtag/rtl/jtag.v"                \
+    "$RTL_PATHS/chip/rtl/chip.v"
+
+# --- 7. noc_axi4_bridge (NoC → AXI4) ---
+lappend XVLOG_RTL_FILES \
+    "$RTL_PATHS/chipset/rtl/storage_addr_trans.v"                        \
+    "$RTL_PATHS/chipset/noc_axi4_bridge/rtl/noc_axi4_bridge_sram_data.v" \
+    "$RTL_PATHS/chipset/noc_axi4_bridge/rtl/noc_axi4_bridge_sram_req.v"  \
+    "$PITON_DIR/piton/design/chipset/noc_axi4_bridge/rtl/axi4_zeroer.v"          \
+    "$PITON_DIR/piton/design/chipset/noc_axi4_bridge/rtl/noc_axi4_bridge_deser.v" \
+    "$PITON_DIR/piton/design/chipset/noc_axi4_bridge/rtl/noc_axi4_bridge_ser.v"   \
+    "$PITON_DIR/piton/design/chipset/noc_axi4_bridge/rtl/noc_axi4_bridge_read.v"  \
+    "$PITON_DIR/piton/design/chipset/noc_axi4_bridge/rtl/noc_axi4_bridge_write.v" \
+    "$PITON_DIR/piton/design/chipset/noc_axi4_bridge/rtl/noc_axi4_bridge_buffer.v" \
+    "$PITON_DIR/piton/design/chipset/noc_axi4_bridge/rtl/noc_axi4_bridge.v"
+
 
 # ================== Arquivos do Testbench ===================
 set XVHDL_TB_FILES [list]
 
 set XVLOG_TB_FILES [list \
-    "$TB_PATHS/stubs.v"             \
-    "$TB_PATHS/tb_dual_core_cva6.v" \
+    "$TB_PATHS/stubs.v"               \
+    "$TB_PATHS/protocol_adapter.v"    \
+    "$TB_PATHS/axi4_sram_model.v"     \
+    "$TB_PATHS/tb_soc_dual_core.v"    \
 ]

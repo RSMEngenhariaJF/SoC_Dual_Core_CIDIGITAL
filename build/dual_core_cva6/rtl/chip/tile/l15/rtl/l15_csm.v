@@ -517,7 +517,8 @@ begin
         else
         begin
             csm_l15_res_data_s3 = 0;
-            csm_l15_res_data_s3[`PACKET_HOME_ID_CHIP_MASK] = 1'b0; // non-csm mode only has 1 chip alone
+            // chip_id=1 routes off-chip via XBAR (chipset/bridge); 0 stays on-chip for device accesses
+            csm_l15_res_data_s3[`PACKET_HOME_ID_CHIP_MASK] = on_chip_dev_access_s3 ? {`NOC_CHIPID_WIDTH{1'b0}} : {{(`NOC_CHIPID_WIDTH-1){1'b0}}, 1'b1};
             csm_l15_res_data_s3[`PACKET_HOME_ID_Y_MASK] = on_chip_dev_access_s3 ? on_chip_dev_access_y_s3 : lhid_s3_y;
             csm_l15_res_data_s3[`PACKET_HOME_ID_X_MASK] = on_chip_dev_access_s3 ? on_chip_dev_access_x_s3 : lhid_s3_x;
         end
@@ -721,7 +722,7 @@ assign csm_noc1encoder_req_size = 0;
 always @ *
 begin
     csm_l15_res_data_s3 = 0;
-    csm_l15_res_data_s3[`PACKET_HOME_ID_CHIP_MASK] = 1'b0; // non-csm mode only has 1 chip alone
+    csm_l15_res_data_s3[`PACKET_HOME_ID_CHIP_MASK] = on_chip_dev_access_s3 ? {`NOC_CHIPID_WIDTH{1'b0}} : {{(`NOC_CHIPID_WIDTH-1){1'b0}}, 1'b1};
     csm_l15_res_data_s3[`PACKET_HOME_ID_Y_MASK] = on_chip_dev_access_s3 ? on_chip_dev_access_y_s3 : lhid_s3_y;
     csm_l15_res_data_s3[`PACKET_HOME_ID_X_MASK] = on_chip_dev_access_s3 ? on_chip_dev_access_x_s3 : lhid_s3_x;
 end

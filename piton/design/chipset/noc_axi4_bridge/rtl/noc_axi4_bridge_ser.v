@@ -31,17 +31,17 @@
 
 
 module noc_axi4_bridge_ser(
-  input clk, 
-  input rst_n, 
+  input clk,
+  input rst_n,
 
-  input [`MSG_HEADER_WIDTH-1:0] header_in, 
-  input [`AXI4_DATA_WIDTH-1:0] data_in, 
-  input in_val, 
-  output in_rdy, 
+  input [`MSG_HEADER_WIDTH-1:0] header_in,
+  input [`AXI4_DATA_WIDTH-1:0] data_in,
+  input in_val,
+  output in_rdy,
 
-  output reg [`NOC_DATA_WIDTH-1:0] flit_out, 
-  output  flit_out_val, 
-  input flit_out_rdy 
+  output reg [`NOC_DATA_WIDTH-1:0] flit_out,
+  output  flit_out_val,
+  input flit_out_rdy
 );
 
 // states
@@ -51,14 +51,19 @@ localparam SEND_DATA = 2'd2;
 
 reg [`AXI4_DATA_WIDTH-1:0] data_in_f;
 reg [`NOC_DATA_WIDTH-1:0] resp_header;
+reg [`MSG_LENGTH_WIDTH-1:0] resp_msg_length;
+// Set for MSG_TYPE_DATA_ACK (cacheable LOAD_REQ) so each 64-bit flit is
+// byte-reversed before transmission.  The L15ADAP (SwapEndianess=1) will
+// reverse it back, giving the CVA6 correctly-ordered little-endian data.
+reg resp_needs_byteswap;
 
 wire in_go = in_val & in_rdy;
 wire flit_out_go = flit_out_val & flit_out_rdy;
 
-always @(posedge clk) begin 
+always @(posedge clk) begin
   if(~rst_n) begin
     data_in_f <= {`AXI4_DATA_WIDTH{1'b0}};
-  end 
+  end
   else if (in_go) begin
     data_in_f <= data_in;
   end
@@ -69,6 +74,8 @@ end
 
 reg [1:0] state;
 reg [`MSG_LENGTH_WIDTH-1:0] remaining_flits;
+// Raw 64-bit flit word; byte-reversed for DATA_ACK so the L15ADAP swap yields correct LE data.
+wire [63:0] flit_data_raw = data_in_f >> (64 * (resp_msg_length - remaining_flits));
 assign flit_out_val = (state == SEND_HEADER) || (state == SEND_DATA);
 assign in_rdy = (state == ACCEPT);
 
@@ -77,7 +84,7 @@ always @(posedge clk) begin
   if(~rst_n) begin
     state <= ACCEPT;
     remaining_flits <= `MSG_LENGTH_WIDTH'b0;
-  end 
+  end
   else begin
     case (state)
       ACCEPT: begin
@@ -121,7 +128,9 @@ end
 
 always @(posedge clk) begin
   if (~rst_n) begin
-    resp_header <= `NOC_DATA_WIDTH'b0;
+    resp_header         <= `NOC_DATA_WIDTH'b0;
+    resp_msg_length     <= `MSG_LENGTH_WIDTH'b0;
+    resp_needs_byteswap <= 1'b0;
   end
   else begin
     case (state)
@@ -136,29 +145,52 @@ always @(posedge clk) begin
           case (header_in[`MSG_TYPE])
             `MSG_TYPE_LOAD_MEM: begin
               resp_header[`MSG_TYPE    ]     <= `MSG_TYPE_LOAD_MEM_ACK;
-              resp_header[`MSG_LENGTH  ]     <= `PAYLOAD_LEN; 
+              resp_header[`MSG_LENGTH  ]     <= `PAYLOAD_LEN;
+              resp_msg_length                <= `PAYLOAD_LEN;
+              resp_needs_byteswap            <= 1'b0;
             end
             `MSG_TYPE_STORE_MEM: begin
               resp_header[`MSG_TYPE    ]     <= `MSG_TYPE_STORE_MEM_ACK;
               resp_header[`MSG_LENGTH  ]     <= 0;
+              resp_msg_length                <= 0;
+              resp_needs_byteswap            <= 1'b0;
             end
             `MSG_TYPE_NC_LOAD_REQ: begin
               resp_header[`MSG_TYPE    ]     <= `MSG_TYPE_NC_LOAD_MEM_ACK;
-              resp_header[`MSG_LENGTH  ]     <= `PAYLOAD_LEN; 
+              resp_header[`MSG_LENGTH  ]     <= `PAYLOAD_LEN;
+              resp_msg_length                <= `PAYLOAD_LEN;
+              resp_needs_byteswap            <= 1'b0;
             end
             `MSG_TYPE_NC_STORE_REQ: begin
               resp_header[`MSG_TYPE    ]     <= `MSG_TYPE_NC_STORE_MEM_ACK;
               resp_header[`MSG_LENGTH  ]     <= 0;
+              resp_msg_length                <= 0;
+              resp_needs_byteswap            <= 1'b0;
+            end
+            `MSG_TYPE_LOAD_REQ: begin
+              resp_header[`MSG_TYPE    ]     <= `MSG_TYPE_DATA_ACK;
+              resp_header[`MSG_LENGTH  ]     <= `MSG_LENGTH_WIDTH'd4;
+              resp_msg_length                <= `MSG_LENGTH_WIDTH'd4;
+              resp_needs_byteswap            <= 1'b1;
+            end
+            `MSG_TYPE_STORE_REQ: begin
+              resp_header[`MSG_TYPE    ]     <= `MSG_TYPE_NODATA_ACK;
+              resp_header[`MSG_LENGTH  ]     <= 0;
+              resp_msg_length                <= 0;
+              resp_needs_byteswap            <= 1'b0;
             end
             default: begin
-              // shouldn't end up herere
               resp_header[`MSG_TYPE    ]     <= `MSG_TYPE_WIDTH'b0;
               resp_header[`MSG_LENGTH  ]     <= 0;
+              resp_msg_length                <= 0;
+              resp_needs_byteswap            <= 1'b0;
             end
           endcase // header_in[`MSG_TYPE]
         end
         else begin
-          resp_header <= resp_header;
+          resp_header         <= resp_header;
+          resp_msg_length     <= resp_msg_length;
+          resp_needs_byteswap <= resp_needs_byteswap;
         end
       end
       SEND_HEADER: begin
@@ -168,13 +200,18 @@ always @(posedge clk) begin
         else begin
           resp_header <= resp_header;
         end
+        resp_msg_length     <= resp_msg_length;
+        resp_needs_byteswap <= resp_needs_byteswap;
       end
       SEND_DATA: begin
-        resp_header <= resp_header;
+        resp_header         <= resp_header;
+        resp_msg_length     <= resp_msg_length;
+        resp_needs_byteswap <= resp_needs_byteswap;
       end
       default: begin
-        //shouldnt end up here
-        resp_header <= `NOC_DATA_WIDTH'b0;
+        resp_header         <= `NOC_DATA_WIDTH'b0;
+        resp_msg_length     <= `MSG_LENGTH_WIDTH'b0;
+        resp_needs_byteswap <= 1'b0;
       end
     endcase //state
   end
@@ -189,7 +226,16 @@ always @(*) begin
       flit_out = resp_header;
     end
     SEND_DATA: begin
-      flit_out = data_in_f >> (64 * (`PAYLOAD_LEN - remaining_flits));
+      // For cacheable LOAD_REQ (DATA_ACK): byte-reverse the 64-bit flit so
+      // that after the L15ADAP (SwapEndianess=1) reverses it, the CVA6
+      // icache receives the correct little-endian instruction bytes.
+      if (resp_needs_byteswap)
+        flit_out = {flit_data_raw[7:0],   flit_data_raw[15:8],
+                    flit_data_raw[23:16],  flit_data_raw[31:24],
+                    flit_data_raw[39:32],  flit_data_raw[47:40],
+                    flit_data_raw[55:48],  flit_data_raw[63:56]};
+      else
+        flit_out = flit_data_raw;
     end
     default: begin
       flit_out = `NOC_DATA_WIDTH'b0;

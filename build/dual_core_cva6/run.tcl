@@ -95,7 +95,6 @@ proc elaborate {} {
         -relax \
         -s "work.$TOP_NAME" \
         -L work \
-        -debug typical \
         -timescale 1ns/100ps \
         -log elaborate.log >@stdout 2>@stderr
 }

@@ -123,8 +123,9 @@ assign south_calc = done_x & more_y;
 assign north = north_calc | ((final_bits == `FINAL_NORTH) & done);
 assign south = south_calc | ((final_bits == `FINAL_SOUTH) & done);
 assign east = more_x | ((final_bits == `FINAL_EAST) & done);
-assign west = less_x | ((final_bits == `FINAL_WEST) & done);
-assign proc = ((final_bits == `FINAL_NONE) & done);
+// off_chip & done: packet reached OFF_CHIP_NODE gateway — route out via West (off-chip interface)
+assign west = less_x | ((final_bits == `FINAL_WEST) & done) | (off_chip & done_x & done_y);
+assign proc = ((final_bits == `FINAL_NONE) & done & ~off_chip);
 
 assign route_req_n = header_in & north;
 assign route_req_e = header_in & east;
