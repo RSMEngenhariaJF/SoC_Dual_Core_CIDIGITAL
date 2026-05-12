@@ -12,6 +12,16 @@ build/*
 build/dual_core_cva6/work/
 build/dual_core_cva6/tb/vivado_proj/
 
+# UVM testbench - build artifacts (keep source, ignore generated)
+build/dual_core_cva6/uvmt_work/
+build/dual_core_cva6/xsim_work/
+build/dual_core_cva6/dfx_runtime.txt
+build/dual_core_cva6/uvmt_openpiton_cva6/sim/dfx_runtime.txt
+build/dual_core_cva6/uvmt_openpiton_cva6/sim/last_run.log
+build/dual_core_cva6/uvmt_openpiton_cva6/sim/vivado*.jou
+build/dual_core_cva6/uvmt_openpiton_cva6/sim/vivado*.log
+build/dual_core_cva6/uvmt_openpiton_cva6/sim/vivado_batch.log
+
 # Ignore generated logs from back-end
 # Good for 10 levels of hierarchy
 piton/design/*/synopsys/*

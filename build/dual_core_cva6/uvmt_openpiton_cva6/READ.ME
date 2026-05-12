@@ -1,0 +1,36 @@
+uvmt_openpiton_cva6/
+├── tb/                          # Testbench top-level (DUT wrapper + SV interfaces)
+│   ├── uvmt_opc_tb.sv           # Top-level testbench module
+│   └── uvmt_opc_dut_wrap.sv     # DUT wrapper (instantiates OpenPiton tile)
+├── env/                         # UVM Environment
+│   ├── uvmt_opc_env.sv          # Top-level UVM env
+│   ├── uvmt_opc_env_pkg.sv      # Package
+│   └── agents/
+│       ├── clk_rst/             # Clock/Reset agent
+│       ├── noc/                 # NoC P-Mesh agent (NoC1/2/3)
+│       ├── l15_tri/             # L1.5 TRI agent
+│       ├── status/              # Pass/fail status agent
+│       └── uart/                # Fake UART monitor
+├── sv_if/                       # SystemVerilog Interfaces
+│   ├── uvmt_opc_clk_if.sv
+│   ├── uvmt_opc_noc_if.sv
+│   ├── uvmt_opc_l15_tri_if.sv
+│   ├── uvmt_opc_status_if.sv
+│   └── uvmt_opc_uart_if.sv
+├── seq_lib/                     # Sequences
+│   ├── uvmt_opc_base_seq.sv
+│   ├── uvmt_opc_asm_test_seq.sv
+│   └── uvmt_opc_coherence_seq.sv
+├── tests/                       # UVM Tests
+│   ├── uvmt_opc_base_test.sv
+│   ├── uvmt_opc_asm_test.sv
+│   └── uvmt_opc_coherence_test.sv
+├── scoreboard/                  # Scoreboard
+│   └── uvmt_opc_scoreboard.sv
+├── cov/                         # Coverage
+│   └── uvmt_opc_cov_model.sv
+├── sim/                         # Simulation scripts
+│   └── Makefile
+└── bsp/                         # Board Support Package
+    ├── link.ld
+    └── crt0.S
