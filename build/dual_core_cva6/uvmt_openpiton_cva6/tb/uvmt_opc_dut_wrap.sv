@@ -386,13 +386,16 @@ module uvmt_opc_dut_wrap
     // -------------------------------------------------------------------------
     `define SB0 u_chip.tile0.g_ariane_core.core.ariane.i_cva6.ex_stage_i.lsu_i.i_store_unit.store_buffer_i
 
-    wire       sb0_commit_i;
+    wire        sb0_commit_i;
     wire [55:0] sb0_commit_addr;
+    wire [63:0] sb0_commit_data;
 
     assign sb0_commit_i    = `SB0.commit_i;
     assign sb0_commit_addr = `SB0.speculative_queue_q[`SB0.speculative_read_pointer_q].address;
+    assign sb0_commit_data = `SB0.speculative_queue_q[`SB0.speculative_read_pointer_q].data;
 
-    localparam [31:0] TOHOST_ADDR32 = 32'h8000_FF50;
+    localparam [31:0] TOHOST_ADDR32      = 32'h8000_FF50;
+    localparam [31:0] TOHOST_FAIL_ADDR32 = 32'h8000_FF58;
 
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -423,6 +426,13 @@ module uvmt_opc_dut_wrap
                 $display("[%0t ns] STORE_COMMIT tohost=0x%08h @cyc=%0d",
                     $time, sb0_commit_addr[31:0], mon_cycle);
                 status_if.good_trap <= {NUM_TILES{1'b1}};
+            end
+            // Store-commit path para BAD_TRAP: escreve em TOHOST_FAIL_ADDR32
+            if (!status_if.bad_trap[0] && !status_if.good_trap[0] && sb0_commit_i &&
+                sb0_commit_addr[31:0] == TOHOST_FAIL_ADDR32) begin
+                $display("[%0t ns] STORE_COMMIT fail_tohost=0x%08h @cyc=%0d",
+                    $time, sb0_commit_addr[31:0], mon_cycle);
+                status_if.bad_trap <= {NUM_TILES{1'b1}};
             end
         end
     end
@@ -468,11 +478,14 @@ module uvmt_opc_dut_wrap
                 |status_if.good_trap);
     end
 
-    // First 8 AXI AR beats (instruction fetches / cache fills)
+    // All AXI AR beats — label DATA (addr >= 0x80001000) vs INST
     always @(posedge clk) begin
         if (rst_n && m_axi_arvalid && m_axi_arready) begin
-            if (mon_ar_cnt < 8)
-                $display("[%0t ns] AXI_AR[%0d] addr=%h len=%0d @cyc=%0d",
+            if (m_axi_araddr >= 64'h80001000)
+                $display("[%0t ns] AXI_AR[%0d] DATA addr=%h len=%0d @cyc=%0d",
+                    $time, mon_ar_cnt, m_axi_araddr, m_axi_arlen, mon_cycle);
+            else
+                $display("[%0t ns] AXI_AR[%0d] INST addr=%h len=%0d @cyc=%0d",
                     $time, mon_ar_cnt, m_axi_araddr, m_axi_arlen, mon_cycle);
             mon_ar_cnt <= mon_ar_cnt + 1;
         end
@@ -503,15 +516,72 @@ module uvmt_opc_dut_wrap
         end
     end
 
-    // Trap detection — terminate simulation immediately
+    // =========================================================================
+    // CVA6 pipeline probes — commit visibility per hart
+    // wire assigns are safe in xsim 2025.1 (packed struct reads ok; only
+    // writes in always_comb crash).  Same pattern as sb0 probe above.
+    // =========================================================================
+    `define ARIANE0 u_chip.tile0.g_ariane_core.core.ariane
+    `define ARIANE1 u_chip.tile1.g_ariane_core.core.ariane
+
+    wire        h0_ck = `ARIANE0.i_cva6.commit_ack[0];
+    wire [63:0] h0_pc = `ARIANE0.i_cva6.commit_instr_id_commit[0].pc;
+    wire        h0_ex = `ARIANE0.i_cva6.commit_instr_id_commit[0].ex.valid;
+
+    wire        h1_ck = `ARIANE1.i_cva6.commit_ack[0];
+    wire [63:0] h1_pc = `ARIANE1.i_cva6.commit_instr_id_commit[0].pc;
+    wire        h1_ex = `ARIANE1.i_cva6.commit_instr_id_commit[0].ex.valid;
+
+    // Hart 1 store-buffer (mirror of Hart 0 — detects tohost store)
+    `define SB1 `ARIANE1.i_cva6.ex_stage_i.lsu_i.i_store_unit.store_buffer_i
+    wire        sb1_commit_i    = `SB1.commit_i;
+    wire [55:0] sb1_commit_addr = `SB1.speculative_queue_q[`SB1.speculative_read_pointer_q].address;
+    wire [63:0] sb1_commit_data = `SB1.speculative_queue_q[`SB1.speculative_read_pointer_q].data;
+
+    // Commit display — one line per committed instruction, both harts
     always @(posedge clk) begin
-        if (|status_if.good_trap) begin
+        if (rst_n && h0_ck)
+            $display("[%0t ns] H0_COMMIT pc=0x%h%s @cyc=%0d",
+                $time, h0_pc, h0_ex ? " EXC" : "", mon_cycle);
+        if (rst_n && h1_ck)
+            $display("[%0t ns] H1_COMMIT pc=0x%h%s @cyc=%0d",
+                $time, h1_pc, h1_ex ? " EXC" : "", mon_cycle);
+    end
+
+    // Store-buffer commit log — endereço e dado de cada SW commitado
+    always @(posedge clk) begin
+        if (rst_n && sb0_commit_i)
+            $display("[%0t ns] SB0_STORE addr=0x%08h data=0x%016h @cyc=%0d",
+                $time, sb0_commit_addr[31:0], sb0_commit_data, mon_cycle);
+        if (rst_n && sb1_commit_i)
+            $display("[%0t ns] SB1_STORE addr=0x%08h data=0x%016h @cyc=%0d",
+                $time, sb1_commit_addr[31:0], sb1_commit_data, mon_cycle);
+    end
+
+    // =========================================================================
+    // Trap detection — 25-cycle drain after GOOD_TRAP to observe Hart 1
+    // =========================================================================
+    reg         trap_seen;
+    integer     trap_countdown;
+
+    initial begin trap_seen = 0; trap_countdown = 0; end
+
+    always @(posedge clk) begin
+        if (|status_if.good_trap && !trap_seen) begin
+            trap_seen      <= 1'b1;
+            trap_countdown <= 25;
             $display("[%0t ns] *** GOOD TRAP (PASS) *** @cyc=%0d", $time, mon_cycle);
-            $finish;
         end
-        if (|status_if.bad_trap) begin
+        if (|status_if.bad_trap && !trap_seen) begin
+            trap_seen      <= 1'b1;
+            trap_countdown <= 0;
             $display("[%0t ns] *** BAD TRAP (FAIL) *** @cyc=%0d", $time, mon_cycle);
-            $finish;
+        end
+        if (trap_seen) begin
+            if (trap_countdown > 0)
+                trap_countdown <= trap_countdown - 1;
+            else
+                $finish;
         end
     end
 

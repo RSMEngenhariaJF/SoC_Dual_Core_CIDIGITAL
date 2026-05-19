@@ -127,3 +127,17 @@ ucli.key
 cscope.*
 tags
 *.bak
+
+# Vivado session backup files
+build/dual_core_cva6/vivado*.jou
+build/dual_core_cva6/vivado*.log
+
+# doc/ - manter logs de simulação apesar da regra *.log global
+!doc/**
+!doc/**/*.log
+!doc/**/*.docx
+!doc/**/*.png
+!doc/**/*.pdf
+!doc/**/*.hex
+!doc/**/*.py
+!doc/**/*.tcl

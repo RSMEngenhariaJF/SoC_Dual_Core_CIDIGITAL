@@ -1,0 +1,435 @@
+#-----------------------------------------------------------
+# xsim v2025.1 (64-bit)
+# SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
+# IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
+# SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
+# Start of session at: Sun May 17 18:28:34 2026
+# Process ID         : 19736
+# Current directory  : C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/xsim_work
+# Command line       : xsim.exe -log simulate.log -mode tcl -source {xsim.dir/work.uvmt_opc_tb/xsim_script.tcl}
+# Log file           : C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/xsim_work/simulate.log
+# Journal file       : C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/xsim_work\xsim.jou
+# Running On         : Rafael
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 26200
+# Processor Detail   : 12th Gen Intel(R) Core(TM) i5-12450H
+# CPU Frequency      : 2496 MHz
+# CPU Physical cores : 8
+# CPU Logical cores  : 12
+# Host memory        : 8260 MB
+# Swap memory        : 18253 MB
+# Total Virtual      : 26513 MB
+# Available Virtual  : 8593 MB
+#-----------------------------------------------------------
+source xsim.dir/work.uvmt_opc_tb/xsim_script.tcl
+# xsim {work.uvmt_opc_tb} -testplusarg UVM_TESTNAME=uvmt_opc_asm_test_c -testplusarg UVM_VERBOSITY=UVM_LOW -testplusarg TEST_BINARY=C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/tb/boot_rw.hex -testplusarg TIMEOUT=5000000 -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+UVM_INFO C:/Xilinx/2025.1/Vivado/data/system_verilog/uvm_1.2/xlnx_uvm_package.sv(18601) @ 0: reporter [UVM/RELNOTES] 
+----------------------------------------------------------------
+UVM-1.2
+(C) 2007-2014 Mentor Graphics Corporation
+(C) 2007-2014 Cadence Design Systems, Inc.
+(C) 2006-2014 Synopsys, Inc.
+(C) 2011-2013 Cypress Semiconductor Corp.
+(C) 2013-2014 NVIDIA Corporation
+----------------------------------------------------------------
+
+  ***********       IMPORTANT RELEASE NOTES         ************
+
+  You are using a version of the UVM library that has been compiled
+  with `UVM_NO_DEPRECATED undefined.
+
+  You are using a version of the UVM library that has been compiled
+  with `UVM_OBJECT_DO_NOT_NEED_CONSTRUCTOR undefined.
+
+      (Specify +UVM_NO_RELNOTES to turn off this notice)
+
+UVM_INFO C:/Xilinx/2025.1/Vivado/data/system_verilog/uvm_1.2/xlnx_uvm_package.sv(18648) @ 0: reporter [NO_DPI_TSTNAME] UVM_NO_DPI defined--getting UVM_TESTNAME directly, without DPI
+UVM_INFO @ 0: reporter [RNTST] Running test uvmt_opc_asm_test_c...
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/env/uvmt_opc_cfg.sv(71) @ 0: reporter [OPC_CFG] [CFG] 3x5 tiles | timeout=5000000 | finish_mask=0x7fff
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/tests/uvmt_opc_asm_test.sv(45) @ 0: uvm_test_top [OPC_ASM_TEST] Binario de teste: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/tb/boot_rw.hex
+UVM_INFO C:/Xilinx/2025.1/Vivado/data/system_verilog/uvm_1.2/xlnx_uvm_package.sv(20867) @ 0: reporter [UVM/COMP/NAMECHECK] This implementation of the component name checks requires DPI to be enabled
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/env/uvmt_opc_env.sv(89) @ 0: uvm_test_top.env [OPC_ENV] Ambiente iniciado: 1x1 tiles | iss=0 | coh=1 | cov=1
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/env/agents/clk_rst/uvmt_opc_clk_rst_drv.sv(40) @ 0: uvm_test_top.env.clk_rst_agent.drv [OPC_CLK_DRV] Iniciando clock: periodo=10000 ps, reset=20 ciclos
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/seq_lib/uvmt_opc_asm_test_seq.sv(28) @ 0: uvm_test_top.env.clk_rst_agent.seqr@@asm_seq [OPC_ASM_SEQ] Iniciando teste: 'C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/tb/boot_rw.hex' | binary='C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/tb/boot_rw.hex'
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/seq_lib/uvmt_opc_asm_test_seq.sv(37) @ 0: uvm_test_top.env.clk_rst_agent.seqr@@asm_seq [OPC_ASM_SEQ] Clock/reset aplicados. Aguardando execucao do DUT.
+[TRACER] Output filename is: trace_hart_0.log
+[TRACER] Output filename is: trace_hart_1.log
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/env/agents/clk_rst/uvmt_opc_clk_rst_drv.sv(57) @ 200000: uvm_test_top.env.clk_rst_agent.drv [OPC_CLK_DRV] rst_n desassertado no ciclo 20
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/env/agents/clk_rst/uvmt_opc_clk_rst_mon.sv(35) @ 205000: uvm_test_top.env.clk_rst_agent.mon [OPC_CLK_MON] Reset desassertado - DUT pronto
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/env/agents/l15_tri/uvmt_opc_l15_tri_mon.sv(52) @ 205000: uvm_test_top.env.l15_tri_agent.mon [OPC_L15_MON] Monitor L1.5 TRI iniciado
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/env/agents/status/uvmt_opc_status_mon.sv(46) @ 205000: uvm_test_top.env.status_agent.mon [OPC_STATUS_MON] Monitor de status iniciado
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/env/agents/noc/uvmt_opc_noc_mon.sv(52) @ 215000: uvm_test_top.env.noc_agent.mon [OPC_NOC_MON] Monitor NoC iniciado
+[1685000] [ICACHE] state 0->1 flush_cnt=127 cache_en=0
+[1685000] [ICACHE] FLUSH DONE cnt=127
+[1685000] [MISSUNIT] FSM: 3->0 wbuf_empty=1 mshr_vld=0 flush_i=0 en_i=1 en_q=0
+[1685000] [ICACHE] state 0->1 flush_cnt=127 cache_en=0
+[1685000] [ICACHE] FLUSH DONE cnt=127
+[1685000] [MISSUNIT] FSM: 3->0 wbuf_empty=1 mshr_vld=0 flush_i=0 en_i=1 en_q=0
+[1695000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[1695000] [ICACHE] FETCH REQ vaddr=0x80000000
+[1695000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[1695000] [ICACHE] FETCH REQ vaddr=0x80000000
+[1705000] [ICACHE] state 2->3 flush_cnt=0 cache_en=1
+[1705000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=0 ex_vld=0 inv_q=0 flush_d=0 mem_req=1 mem_ack=1
+[1705000] [ICACHE] MISS paddr=0x0000000080000000 nc=0
+[1705000] [ICACHE] state 2->3 flush_cnt=0 cache_en=1
+[1705000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=0 ex_vld=0 inv_q=0 flush_d=0 mem_req=1 mem_ack=1
+[1705000] [ICACHE] MISS paddr=0x0000000080000000 nc=0
+[1715000] [L15ADAP] REQ->L15 type=16 addr=0x0080000000 nc=0 tid=0
+[1715000] [L15ADAP] REQ->L15 type=16 addr=0x0080000000 nc=0 tid=0
+ERROR: Assertion failed. 
+Time: 1775 ns Started: 1765 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[1785000 ns] NOC1_FIRST data=0000000000000000 @cyc=158
+ERROR: Assertion failed. 
+Time: 1785 ns Started: 1775 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+ERROR: Assertion failed. 
+Time: 1825 ns Started: 1815 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[1835000 ns] AXI_AR[0] INST addr=0000000080000000 len=0 @cyc=163
+[1875000 ns] AXI_AR[1] INST addr=0000000080000000 len=0 @cyc=167
+[2015000] [L15ADAP] L15->RTRN type=1 nc=0
+ERROR: Assertion failed. 
+Time: 2025 ns Started: 2015 ns Scope: /uvmt_opc_tb/l15_tri_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_l15_tri_if.sv Line:112
+[2025000] [ICACHE] state 3->1 flush_cnt=0 cache_en=1
+[2025000] [ICACHE] IFILL_ACK received
+[2025000] [L15ADAP] IFILL->ICACHE data[63:0]=0x00051863f1402573
+[2035000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[2035000] [ICACHE] FETCH REQ vaddr=0x80000004
+[2045000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2055000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2065000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2075000 ns] H0_COMMIT pc=0x0000000080000000     @cyc=187
+[2075000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2085000] [ICACHE] READ: fv=1 kill2=1 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2095000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2105000 ns] H0_COMMIT pc=0x0000000080000004     @cyc=190
+[2105000] [ICACHE] state 2->3 flush_cnt=0 cache_en=1
+[2105000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=0 ex_vld=0 inv_q=0 flush_d=0 mem_req=1 mem_ack=1
+[2105000] [ICACHE] MISS paddr=0x0000000080000020 nc=0
+[2115000 ns] H0_COMMIT pc=0x0000000080000008     @cyc=191
+[2115000] [L15ADAP] REQ->L15 type=16 addr=0x0080000020 nc=0 tid=0
+[2115000] [L15ADAP] L15->RTRN type=1 nc=0
+[2125000 ns] H0_COMMIT pc=0x000000008000000c     @cyc=192
+[2125000] [ICACHE] state 3->1 flush_cnt=0 cache_en=1
+[2125000] [ICACHE] IFILL_ACK received
+[2125000] [L15ADAP] IFILL->ICACHE data[63:0]=0x00051863f1402573
+[2135000 ns] H0_COMMIT pc=0x0000000080000010     @cyc=193
+[2135000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[2135000] [ICACHE] FETCH REQ vaddr=0x80000004
+[2145000 ns] H0_COMMIT pc=0x000000008000001c     @cyc=194
+[2145000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2155000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2165000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2175000 ns] H1_COMMIT pc=0x0000000080000000     @cyc=197
+ERROR: Assertion failed. 
+Time: 2175 ns Started: 2165 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[2175000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+ERROR: Assertion failed. 
+Time: 2185 ns Started: 2175 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[2185000] [ICACHE] READ: fv=1 kill2=1 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2195000] [ICACHE] state 2->1 flush_cnt=0 cache_en=1
+[2195000] [ICACHE] READ: fv=1 kill2=1 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2205000 ns] H1_COMMIT pc=0x0000000080000004     @cyc=200
+[2205000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[2205000] [ICACHE] FETCH REQ vaddr=0x80000014
+[2215000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2225000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2235000 ns] AXI_AR[2] INST addr=0000000080000000 len=0 @cyc=203
+[2235000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2245000] [ICACHE] state 2->3 flush_cnt=0 cache_en=1
+[2245000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=0 ex_vld=0 inv_q=0 flush_d=0 mem_req=1 mem_ack=1
+[2245000] [ICACHE] MISS paddr=0x0000000080000020 nc=0
+[2255000] [L15ADAP] REQ->L15 type=16 addr=0x0080000020 nc=0 tid=0
+[2265000 ns] H1_COMMIT pc=0x0000000080000014     @cyc=206
+[2275000 ns] H1_COMMIT pc=0x0000000080000018     @cyc=207
+[2285000 ns] H1_COMMIT pc=0x000000008000001c     @cyc=208
+ERROR: Assertion failed. 
+Time: 2325 ns Started: 2315 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+ERROR: Assertion failed. 
+Time: 2335 ns Started: 2325 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[2385000 ns] AXI_AR[3] INST addr=0000000080000000 len=0 @cyc=218
+[2415000] [L15ADAP] L15->RTRN type=1 nc=0
+ERROR: Assertion failed. 
+Time: 2425 ns Started: 2415 ns Scope: /uvmt_opc_tb/l15_tri_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_l15_tri_if.sv Line:112
+[2425000] [ICACHE] state 3->1 flush_cnt=0 cache_en=1
+[2425000] [ICACHE] IFILL_ACK received
+[2425000] [L15ADAP] IFILL->ICACHE data[63:0]=0x02c587b340c58733
+[2435000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[2435000] [ICACHE] FETCH REQ vaddr=0x80000024
+[2445000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2455000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2465000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2475000 ns] H0_COMMIT pc=0x0000000080000020     @cyc=227
+[2475000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2485000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2495000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2505000 ns] H0_COMMIT pc=0x0000000080000024     @cyc=230
+[2505000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2515000 ns] H0_COMMIT pc=0x0000000080000028     @cyc=231
+[2515000] [ICACHE] state 2->3 flush_cnt=0 cache_en=1
+[2515000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=0 ex_vld=0 inv_q=0 flush_d=0 mem_req=1 mem_ack=1
+[2515000] [ICACHE] MISS paddr=0x0000000080000040 nc=0
+[2525000 ns] H0_COMMIT pc=0x000000008000002c     @cyc=232
+[2525000] [L15ADAP] REQ->L15 type=16 addr=0x0080000040 nc=0 tid=0
+[2535000 ns] H0_COMMIT pc=0x0000000080000030     @cyc=233
+[2545000 ns] H0_COMMIT pc=0x0000000080000034     @cyc=234
+[2565000 ns] H0_COMMIT pc=0x0000000080000038     @cyc=236
+[2575000] [L15ADAP] L15->RTRN type=1 nc=0
+[2585000 ns] H0_COMMIT pc=0x000000008000003c     @cyc=238
+[2585000 ns] SB0_STORE addr=0x80001000 data=0x0000000000000010 @cyc=238
+ERROR: Assertion failed. 
+Time: 2585 ns Started: 2575 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[2585000] [ICACHE] state 3->1 flush_cnt=0 cache_en=1
+[2585000] [ICACHE] IFILL_ACK received
+[2585000] [L15ADAP] IFILL->ICACHE data[63:0]=0x02c587b340c58733
+ERROR: Assertion failed. 
+Time: 2595 ns Started: 2585 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[2595000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[2595000] [ICACHE] FETCH REQ vaddr=0x80000024
+[2605000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2615000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2625000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2635000 ns] H1_COMMIT pc=0x0000000080000020     @cyc=243
+[2635000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2645000 ns] AXI_AR[4] INST addr=0000000080000040 len=0 @cyc=244
+[2645000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2655000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2665000 ns] H1_COMMIT pc=0x0000000080000024     @cyc=246
+[2665000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2675000 ns] H1_COMMIT pc=0x0000000080000028     @cyc=247
+[2675000] [ICACHE] state 2->3 flush_cnt=0 cache_en=1
+[2675000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=0 ex_vld=0 inv_q=0 flush_d=0 mem_req=1 mem_ack=1
+[2675000] [ICACHE] MISS paddr=0x0000000080000040 nc=0
+[2685000 ns] H1_COMMIT pc=0x000000008000002c     @cyc=248
+[2685000] [ICACHE] state 3->5 flush_cnt=0 cache_en=1
+[2685000] [L15ADAP] REQ->L15 type=16 addr=0x0080000040 nc=0 tid=0
+[2695000 ns] H1_COMMIT pc=0x0000000080000030     @cyc=249
+ERROR: Assertion failed. 
+Time: 2755 ns Started: 2745 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+ERROR: Assertion failed. 
+Time: 2765 ns Started: 2755 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[2815000 ns] AXI_AR[5] INST addr=0000000080000040 len=0 @cyc=261
+[2835000] [L15ADAP] L15->RTRN type=1 nc=0
+ERROR: Assertion failed. 
+Time: 2845 ns Started: 2835 ns Scope: /uvmt_opc_tb/l15_tri_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_l15_tri_if.sv Line:112
+[2845000] [ICACHE] state 3->1 flush_cnt=0 cache_en=1
+[2845000] [ICACHE] IFILL_ACK received
+[2845000] [L15ADAP] IFILL->ICACHE data[63:0]=0x00f2a42300e2a223
+[2855000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[2855000] [ICACHE] FETCH REQ vaddr=0x80000044
+[2865000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2875000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2885000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2895000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2905000 ns] H0_COMMIT pc=0x0000000080000040     @cyc=270
+[2905000 ns] SB0_STORE addr=0x80001004 data=0x0000000400000000 @cyc=270
+[2905000] [ICACHE] READ: fv=1 kill2=1 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[2915000] [ICACHE] state 2->3 flush_cnt=0 cache_en=1
+[2915000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=0 ex_vld=0 inv_q=0 flush_d=0 mem_req=1 mem_ack=1
+[2915000] [ICACHE] MISS paddr=0x0000000080000060 nc=0
+[2925000 ns] H0_COMMIT pc=0x0000000080000044     @cyc=272
+[2925000 ns] SB0_STORE addr=0x80001008 data=0x000000000000003c @cyc=272
+[2925000] [L15ADAP] REQ->L15 type=16 addr=0x0080000060 nc=0 tid=0
+[2935000 ns] H0_COMMIT pc=0x0000000080000048     @cyc=273
+[2935000 ns] SB0_STORE addr=0x8000100c data=0x0000000200000000 @cyc=273
+[2945000 ns] H0_COMMIT pc=0x000000008000004c     @cyc=274
+[2945000 ns] SB0_STORE addr=0x80001010 data=0x000000000000000e @cyc=274
+ERROR: Assertion failed. 
+Time: 2985 ns Started: 2975 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+ERROR: Assertion failed. 
+Time: 2995 ns Started: 2985 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[2995000] [L15ADAP] L15->RTRN type=1 nc=0
+[3005000] [ICACHE] state 5->1 flush_cnt=0 cache_en=1
+[3005000] [L15ADAP] IFILL->ICACHE data[63:0]=0x00f2a42300e2a223
+[3015000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[3015000] [ICACHE] FETCH REQ vaddr=0x80000054
+[3025000] [ICACHE] state 2->3 flush_cnt=0 cache_en=1
+[3025000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=0 ex_vld=0 inv_q=0 flush_d=0 mem_req=1 mem_ack=1
+[3025000] [ICACHE] MISS paddr=0x0000000080000040 nc=0
+[3035000] [L15ADAP] REQ->L15 type=16 addr=0x0080000040 nc=0 tid=0
+[3045000 ns] AXI_AR[6] INST addr=0000000080000040 len=0 @cyc=284
+ERROR: Assertion failed. 
+Time: 3105 ns Started: 3095 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+ERROR: Assertion failed. 
+Time: 3115 ns Started: 3105 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[3165000 ns] AXI_AR[7] INST addr=0000000080000040 len=0 @cyc=296
+[3235000] [L15ADAP] L15->RTRN type=1 nc=0
+ERROR: Assertion failed. 
+Time: 3245 ns Started: 3235 ns Scope: /uvmt_opc_tb/l15_tri_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_l15_tri_if.sv Line:112
+[3245000] [ICACHE] state 3->1 flush_cnt=0 cache_en=1
+[3245000] [ICACHE] IFILL_ACK received
+[3245000] [L15ADAP] IFILL->ICACHE data[63:0]=0x00f2a42300e2a223
+[3255000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[3255000] [ICACHE] FETCH REQ vaddr=0x80000078
+[3265000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[3275000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[3285000] [ICACHE] state 2->3 flush_cnt=0 cache_en=1
+[3285000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=0 ex_vld=0 inv_q=0 flush_d=0 mem_req=1 mem_ack=1
+[3285000] [ICACHE] MISS paddr=0x0000000080000080 nc=0
+[3295000 ns] H0_COMMIT pc=0x0000000080000074     @cyc=309
+[3295000] [L15ADAP] REQ->L15 type=16 addr=0x0080000080 nc=0 tid=0
+[3315000 ns] H0_COMMIT pc=0x0000000080000078     @cyc=311
+[3325000 ns] H0_COMMIT pc=0x000000008000007c     @cyc=312
+ERROR: Assertion failed. 
+Time: 3355 ns Started: 3345 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[3355000] [L15ADAP] L15->RTRN type=1 nc=0
+ERROR: Assertion failed. 
+Time: 3365 ns Started: 3355 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[3365000] [ICACHE] state 3->1 flush_cnt=0 cache_en=1
+[3365000] [ICACHE] IFILL_ACK received
+[3365000] [L15ADAP] IFILL->ICACHE data[63:0]=0x00f2a42300e2a223
+[3375000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[3375000] [ICACHE] FETCH REQ vaddr=0x80000058
+[3385000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[3395000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[3405000] [ICACHE] state 2->3 flush_cnt=0 cache_en=1
+[3405000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=0 ex_vld=0 inv_q=0 flush_d=0 mem_req=1 mem_ack=1
+[3405000] [ICACHE] MISS paddr=0x0000000080000060 nc=0
+[3415000 ns] AXI_AR[8] INST addr=0000000080000080 len=0 @cyc=321
+[3415000 ns] H1_COMMIT pc=0x0000000080000054     @cyc=321
+[3415000] [L15ADAP] REQ->L15 type=16 addr=0x0080000060 nc=0 tid=0
+[3435000 ns] H1_COMMIT pc=0x0000000080000058     @cyc=323
+[3455000 ns] H1_COMMIT pc=0x000000008000005c     @cyc=325
+[3455000 ns] SB1_STORE addr=0x80001020 data=0x000000000000000c @cyc=325
+ERROR: Assertion failed. 
+Time: 3485 ns Started: 3475 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+ERROR: Assertion failed. 
+Time: 3495 ns Started: 3485 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[3545000 ns] AXI_AR[9] INST addr=0000000080000040 len=0 @cyc=334
+[3595000] [L15ADAP] L15->RTRN type=1 nc=0
+ERROR: Assertion failed. 
+Time: 3605 ns Started: 3595 ns Scope: /uvmt_opc_tb/l15_tri_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_l15_tri_if.sv Line:112
+[3605000] [ICACHE] state 3->1 flush_cnt=0 cache_en=1
+[3605000] [ICACHE] IFILL_ACK received
+[3605000] [L15ADAP] IFILL->ICACHE data[63:0]=0x03c0029306571263
+[3615000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[3615000] [ICACHE] FETCH REQ vaddr=0x80000084
+[3625000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[3635000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[3645000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[3655000 ns] H0_COMMIT pc=0x0000000080000080     @cyc=345
+[3655000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[3665000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[3675000 ns] H0_COMMIT pc=0x0000000080000084     @cyc=347
+[3675000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[3685000 ns] H0_COMMIT pc=0x0000000080000088     @cyc=348
+[3685000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[3695000 ns] H0_COMMIT pc=0x000000008000008c     @cyc=349
+[3695000] [ICACHE] state 2->1 flush_cnt=0 cache_en=1
+[3695000] [ICACHE] READ: fv=1 kill2=1 spec=0 addr_ni=0 clhit=0 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[3705000 ns] H0_COMMIT pc=0x0000000080000090     @cyc=350
+[3705000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[3705000] [ICACHE] FETCH REQ vaddr=0x800000cc
+[3715000 ns] H0_COMMIT pc=0x0000000080000094     @cyc=351
+[3715000] [ICACHE] state 2->3 flush_cnt=0 cache_en=1
+[3715000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=0 ex_vld=0 inv_q=0 flush_d=0 mem_req=1 mem_ack=1
+[3715000] [ICACHE] MISS paddr=0x00000000800000c0 nc=0
+[3725000 ns] H0_COMMIT pc=0x0000000080000098     @cyc=352
+[3725000] [L15ADAP] REQ->L15 type=16 addr=0x00800000c0 nc=0 tid=0
+[3735000 ns] H0_COMMIT pc=0x000000008000009c     @cyc=353
+[3735000] [L15ADAP] L15->RTRN type=1 nc=0
+[3745000] [ICACHE] state 3->1 flush_cnt=0 cache_en=1
+[3745000] [ICACHE] IFILL_ACK received
+[3745000] [L15ADAP] IFILL->ICACHE data[63:0]=0x00f2a42300e2a223
+[3755000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[3755000] [ICACHE] FETCH REQ vaddr=0x80000064
+[3765000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[3775000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+ERROR: Assertion failed. 
+Time: 3785 ns Started: 3775 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[3785000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+ERROR: Assertion failed. 
+Time: 3795 ns Started: 3785 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[3795000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[3805000 ns] H1_COMMIT pc=0x0000000080000060     @cyc=360
+[3805000 ns] SB1_STORE addr=0x80001024 data=0x0000000600000000 @cyc=360
+[3805000] [ICACHE] READ: fv=1 kill2=1 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[3815000] [ICACHE] state 2->3 flush_cnt=0 cache_en=1
+[3815000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=0 ex_vld=0 inv_q=0 flush_d=0 mem_req=1 mem_ack=1
+[3815000] [ICACHE] MISS paddr=0x00000000800000a0 nc=0
+[3825000 ns] H1_COMMIT pc=0x0000000080000064     @cyc=362
+[3825000 ns] SB1_STORE addr=0x80001028 data=0x000000000000001b @cyc=362
+[3825000] [L15ADAP] REQ->L15 type=16 addr=0x00800000a0 nc=0 tid=0
+[3835000 ns] H1_COMMIT pc=0x0000000080000068     @cyc=363
+[3835000 ns] SB1_STORE addr=0x8000102c data=0x0000000100000000 @cyc=363
+[3845000 ns] AXI_AR[10] INST addr=00000000800000c0 len=0 @cyc=364
+[3845000 ns] H1_COMMIT pc=0x000000008000006c     @cyc=364
+[3845000 ns] SB1_STORE addr=0x80001030 data=0x000000000000000b @cyc=364
+ERROR: Assertion failed. 
+Time: 3895 ns Started: 3885 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+ERROR: Assertion failed. 
+Time: 3905 ns Started: 3895 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[3955000 ns] AXI_AR[11] INST addr=0000000080000080 len=0 @cyc=375
+[4035000] [L15ADAP] L15->RTRN type=1 nc=0
+ERROR: Assertion failed. 
+Time: 4045 ns Started: 4035 ns Scope: /uvmt_opc_tb/l15_tri_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_l15_tri_if.sv Line:112
+[4045000] [ICACHE] state 3->1 flush_cnt=0 cache_en=1
+[4045000] [ICACHE] IFILL_ACK received
+[4045000] [L15ADAP] IFILL->ICACHE data[63:0]=0x0258906300b00293
+[4055000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[4055000] [ICACHE] FETCH REQ vaddr=0x800000d0
+[4065000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[4075000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[4085000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[4095000 ns] H0_COMMIT pc=0x00000000800000cc     @cyc=389
+[4095000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[4105000] [ICACHE] state 2->3 flush_cnt=0 cache_en=1
+[4105000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=0 ex_vld=0 inv_q=0 flush_d=0 mem_req=1 mem_ack=1
+[4105000] [ICACHE] MISS paddr=0x00000000800000e0 nc=0
+[4115000 ns] H0_COMMIT pc=0x00000000800000d0     @cyc=391
+[4115000] [L15ADAP] REQ->L15 type=16 addr=0x00800000e0 nc=0 tid=0
+[4135000 ns] H0_COMMIT pc=0x00000000800000d4     @cyc=393
+[4135000] [L15ADAP] L15->RTRN type=1 nc=0
+[4145000 ns] H0_COMMIT pc=0x00000000800000d8     @cyc=394
+[4145000] [ICACHE] state 3->1 flush_cnt=0 cache_en=1
+[4145000] [ICACHE] IFILL_ACK received
+[4145000] [L15ADAP] IFILL->ICACHE data[63:0]=0x0456906300c00293
+[4155000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[4155000] [ICACHE] FETCH REQ vaddr=0x800000a4
+[4165000 ns] STORE_COMMIT tohost=0x8000ff50 @cyc=396
+[4165000 ns] H0_COMMIT pc=0x00000000800000dc     @cyc=396
+[4165000 ns] SB0_STORE addr=0x8000ff50 data=0x0000000000000001 @cyc=396
+[4165000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[4175000 ns] *** GOOD TRAP (PASS) *** @cyc=397
+ERROR: Assertion failed. 
+Time: 4175 ns Started: 4165 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[4175000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/env/agents/status/uvmt_opc_status_mon.sv(79) @ 4175000: uvm_test_top.env.status_agent.mon [OPC_STATUS_MON] >>> HIT GOOD TRAP - Tile 0 (ciclo 397) <<<
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/scoreboard/uvmt_opc_scoreboard.sv(256) @ 4175000: uvm_test_top.env.scoreboard [OPC_SB] GOOD TRAP tile=0. Completados=0x1 / Esperados=0x1
+ERROR: Assertion failed. 
+Time: 4185 ns Started: 4175 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[4185000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[4195000 ns] H1_COMMIT pc=0x00000000800000a0     @cyc=399
+[4195000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[4205000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[4215000 ns] H1_COMMIT pc=0x00000000800000a4     @cyc=401
+[4215000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[4225000 ns] H1_COMMIT pc=0x00000000800000a8     @cyc=402
+[4225000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[4235000 ns] AXI_AR[12] INST addr=00000000800000c0 len=0 @cyc=403
+[4235000 ns] H1_COMMIT pc=0x00000000800000ac     @cyc=403
+[4235000] [ICACHE] state 2->3 flush_cnt=0 cache_en=1
+[4235000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=0 ex_vld=0 inv_q=0 flush_d=0 mem_req=1 mem_ack=1
+[4235000] [ICACHE] MISS paddr=0x00000000800000c0 nc=0
+[4245000 ns] H1_COMMIT pc=0x00000000800000b0     @cyc=404
+[4245000] [L15ADAP] REQ->L15 type=16 addr=0x00800000c0 nc=0 tid=0
+[4255000 ns] H1_COMMIT pc=0x00000000800000b4     @cyc=405
+[4265000 ns] H1_COMMIT pc=0x00000000800000b8     @cyc=406
+[4275000 ns] H1_COMMIT pc=0x00000000800000bc     @cyc=407
+ERROR: Assertion failed. 
+Time: 4315 ns Started: 4305 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+ERROR: Assertion failed. 
+Time: 4325 ns Started: 4315 ns Scope: /uvmt_opc_tb/noc_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_noc_if.sv Line:89
+[4375000 ns] AXI_AR[13] INST addr=00000000800000c0 len=0 @cyc=417
+[4415000] [L15ADAP] L15->RTRN type=1 nc=0
+ERROR: Assertion failed. 
+Time: 4425 ns Started: 4415 ns Scope: /uvmt_opc_tb/l15_tri_if File: C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/sv_if/uvmt_opc_l15_tri_if.sv Line:112
+[4425000] [ICACHE] state 3->1 flush_cnt=0 cache_en=1
+[4425000] [ICACHE] IFILL_ACK received
+[4425000] [L15ADAP] IFILL->ICACHE data[63:0]=0x000103170000006f
+>>> RESULTADO: PASSOU (HIT GOOD TRAP) <<<
+WARNING: The Functional Coverage Database has not been updated during simulation. Please recheck testbench to confirm that covergroups are being instantiated correctly and rerun simulation.
+$finish called at time : 4435 ns : File "C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/tb/uvmt_opc_dut_wrap.sv" Line 584
+exit
+INFO: [Common 17-206] Exiting xsim at Sun May 17 18:28:38 2026...
