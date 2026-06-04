@@ -1,0 +1,42 @@
+// boot_c3.hex - fence.i
+// Hart 0 e Hart 1 cada um emite uma fence.i e segue para tohost.
+//
+// 80000000  00010417  auipc s0, 0x10       # s0 = 0x80010000
+// 80000004  F5040413  addi s0, s0, -176    # s0 = 0x8000FF50 (tohost)
+// 80000008  F14022F3  csrr t0, mhartid
+// 8000000C  02029263  bnez t0, +36 -> 0x80000030
+// 80000010  0000100F  fence.i              # sync I-stream (hart 0)
+// 80000014  00100313  addi t1, x0, 1
+// 80000018  00642023  sw t1, 0(s0)         # TOHOST hart 0
+// 8000001C  0000006F  jal x0, 0            # spin success
+// 80000020  0000006F  jal x0, 0  # padding
+// 80000024  0000006F  jal x0, 0  # padding
+// 80000028  0000006F  jal x0, 0  # padding
+// 8000002C  0000006F  jal x0, 0  # padding
+// 80000030  06400F13  addi t5, x0, 100     # delay
+// 80000034  FFFF0F13  addi t5, t5, -1
+// 80000038  FE0F1EE3  bnez t5, -4
+// 8000003C  0000100F  fence.i              # sync I-stream (hart 1)
+// 80000040  00100313  addi t1, x0, 1
+// 80000044  00642023  sw t1, 0(s0)         # TOHOST hart 1
+// 80000048  0000006F  jal x0, 0            # spin success
+//
+00010417
+F5040413
+F14022F3
+02029263
+0000100F
+00100313
+00642023
+0000006F
+0000006F
+0000006F
+0000006F
+0000006F
+06400F13
+FFFF0F13
+FE0F1EE3
+0000100F
+00100313
+00642023
+0000006F

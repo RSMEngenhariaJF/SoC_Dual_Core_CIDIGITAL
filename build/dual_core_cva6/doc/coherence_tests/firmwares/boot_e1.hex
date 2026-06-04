@@ -1,0 +1,91 @@
+// boot_e1.hex - Timer interrupt via mtimecmp (polling MTIP)
+// Hart 0: mtimecmp[0]=600, polling MTIP, tohost
+// Hart 1: mtimecmp[1]=900, polling MTIP, tohost
+//
+// 80000000  00010417  auipc s0, 0x10       # s0 = 0x80010000
+// 80000004  F5040413  addi s0, s0, -176    # s0 = 0x8000FF50 (tohost)
+// 80000008  F14022F3  csrr t0, mhartid
+// 8000000C  04029A63  bnez t0, +84 -> 0x80000060
+// 80000010  0FF00393  addi t2, x0, 0xFF    # high byte 39:32
+// 80000014  02039393  slli t2, t2, 32      # t2 = 0xFF_00000000
+// 80000018  F1024E37  lui t3, 0xF1024      # t3 (sign-ext)
+// 8000001C  020E1E13  slli t3, t3, 32
+// 80000020  020E5E13  srli t3, t3, 32      # t3 = 0x00000000_F1024000
+// 80000024  01C3E3B3  or t2, t2, t3        # t2 = mtimecmp base
+// 80000028  12C00E13  addi t3, x0, 300      # mtimecmp valor
+// 8000002C  01C3A023  sw t3, 0(t2)         # mtimecmp[hart 0] = 300
+// 80000030  1F400F13  addi t5, x0, 500      # delay arit longo
+// 80000034  FFFF0F13  addi t5, t5, -1
+// 80000038  FE0F1EE3  bnez t5, -4          # delay loop
+// 8000003C  34402FF3  csrr t6, mip
+// 80000040  01F42823  sw t6, 0x10(s0)      # debug mip lido
+// 80000044  080FFF13  andi t5, t6, 0x80    # bit 7 = MTIP
+// 80000048  100F0063  beqz t5, +256        # FAIL se MTIP=0
+// 8000004C  00100313  addi t1, x0, 1
+// 80000050  00642023  sw t1, 0(s0)         # TOHOST hart 0
+// 80000054  0000006F  jal x0, 0            # spin success
+// 80000058  0000006F  jal x0, 0  # padding
+// 8000005C  0000006F  jal x0, 0  # padding
+// 80000060  0FF00393  addi t2, x0, 0xFF    # high byte 39:32
+// 80000064  02039393  slli t2, t2, 32      # t2 = 0xFF_00000000
+// 80000068  F1024E37  lui t3, 0xF1024      # t3 (sign-ext)
+// 8000006C  020E1E13  slli t3, t3, 32
+// 80000070  020E5E13  srli t3, t3, 32      # t3 = 0x00000000_F1024000
+// 80000074  01C3E3B3  or t2, t2, t3        # t2 = mtimecmp base
+// 80000078  00838393  addi t2, t2, 8      # t2 += offset
+// 8000007C  19000E13  addi t3, x0, 400      # mtimecmp valor
+// 80000080  01C3A023  sw t3, 0(t2)         # mtimecmp[hart 1] = 400
+// 80000084  1F400F13  addi t5, x0, 500      # delay arit longo
+// 80000088  FFFF0F13  addi t5, t5, -1
+// 8000008C  FE0F1EE3  bnez t5, -4          # delay loop
+// 80000090  34402FF3  csrr t6, mip
+// 80000094  01F42C23  sw t6, 0x18(s0)      # debug mip lido
+// 80000098  080FFF13  andi t5, t6, 0x80    # bit 7 = MTIP
+// 8000009C  100F0063  beqz t5, +256        # FAIL se MTIP=0
+// 800000A0  00100313  addi t1, x0, 1
+// 800000A4  00642023  sw t1, 0(s0)         # TOHOST hart 1
+// 800000A8  0000006F  jal x0, 0            # spin success
+//
+00010417
+F5040413
+F14022F3
+04029A63
+0FF00393
+02039393
+F1024E37
+020E1E13
+020E5E13
+01C3E3B3
+12C00E13
+01C3A023
+1F400F13
+FFFF0F13
+FE0F1EE3
+34402FF3
+01F42823
+080FFF13
+100F0063
+00100313
+00642023
+0000006F
+0000006F
+0000006F
+0FF00393
+02039393
+F1024E37
+020E1E13
+020E5E13
+01C3E3B3
+00838393
+19000E13
+01C3A023
+1F400F13
+FFFF0F13
+FE0F1EE3
+34402FF3
+01F42C23
+080FFF13
+100F0063
+00100313
+00642023
+0000006F

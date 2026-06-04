@@ -1,0 +1,68 @@
+// A2 - Producer/Consumer (true coherence test)
+//
+// Layout de memoria:
+//   0x80002000  DATA   (linha de cache A)
+//   0x80002040  FLAG   (linha de cache B, 64B apos DATA)
+//   0x8000FF50  TOHOST (linha C)
+//
+// HART 0 (producer):
+//   1. Escreve DATA = 0x123
+//   2. fence rw,rw (barrier)
+//   3. Escreve FLAG = 1
+//   4. Escreve TOHOST = 1
+//
+// HART 1 (consumer):
+//   1. Faz polling: lw FLAG; loop se FLAG == 0
+//      (gera leitura de uma linha que sera invalidada por hart0 -> INVAL_REQ)
+//   2. fence rw,rw
+//   3. lw DATA, compara com 0x123
+//   4. Se OK: escreve TOHOST = 1
+//      Se NOK: trava (timeout = falha)
+//
+// Programa (endereco : instrucao : descricao):
+//   0x80000000  00002397  auipc t2, 2          ; t2 = 0x80002000 (DATA base)
+//   0x80000004  00010317  auipc t1, 0x10       ; t1 = 0x80010004
+//   0x80000008  F4C30313  addi  t1, t1, -180   ; t1 = 0x8000FF50 (TOHOST)
+//   0x8000000C  F14022F3  csrr  t0, mhartid    ; t0 = hart ID
+//   0x80000010  02029063  bnez  t0, +32        ; hart1 -> 0x80000030
+//   // --- HART 0 (producer) ---
+//   0x80000014  12300E13  addi  t3, x0, 0x123  ; data magic
+//   0x80000018  01C3A023  sw    t3, 0(t2)      ; DATA = 0x123
+//   0x8000001C  0330000F  fence rw, rw
+//   0x80000020  00100E93  addi  t4, x0, 1
+//   0x80000024  05D3A023  sw    t4, 64(t2)     ; FLAG = 1 at 0x80002040
+//   0x80000028  01D32023  sw    t4, 0(t1)      ; TOHOST = 1
+//   0x8000002C  0000006F  jal   x0, 0          ; spin
+//   // --- HART 1 (consumer) ---
+//   0x80000030  0403AF03  lw    t5, 64(t2)     ; load FLAG
+//   0x80000034  FE0F0EE3  beqz  t5, -4         ; loop while FLAG == 0
+//   0x80000038  0330000F  fence rw, rw
+//   0x8000003C  0003AF83  lw    t6, 0(t2)      ; load DATA
+//   0x80000040  12300E13  addi  t3, x0, 0x123
+//   0x80000044  01CF9863  bne   t6, t3, +16    ; if DATA != magic -> hang at 0x80000054
+//   0x80000048  00100E93  addi  t4, x0, 1
+//   0x8000004C  01D32023  sw    t4, 0(t1)      ; TOHOST = 1 (success)
+//   0x80000050  0000006F  jal   x0, 0          ; spin
+//   0x80000054  0000006F  jal   x0, 0          ; hang (data check failed)
+00002397
+00010317
+F4C30313
+F14022F3
+02029063
+12300E13
+01C3A023
+0330000F
+00100E93
+05D3A023
+01D32023
+0000006F
+0403AF03
+FE0F0EE3
+0330000F
+0003AF83
+12300E13
+01CF9863
+00100E93
+01D32023
+0000006F
+0000006F

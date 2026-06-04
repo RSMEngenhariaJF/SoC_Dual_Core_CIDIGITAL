@@ -1,0 +1,96 @@
+// boot_e5.hex - Transicao de modo M->S/U + trap handler
+// Hart 0: M->S, ecall (mcause=9)
+// Hart 1: M->U, ecall (mcause=8)
+// Handler: valida mcause em {8,9} e escreve tohost.
+//
+// 80000000  00010417  auipc s0, 0x10       # s0 = 0x80010000 (auipc no addr 0)
+// 80000004  F5040413  addi s0, s0, -176    # s0 = 0x8000FF50 (tohost)
+// 80000008  00000317  auipc t1, 0          # t1 = 0x80000008
+// 8000000C  07830313  addi t1, t1, 120  # t1 = HANDLER
+// 80000010  30531073  csrw mtvec, t1
+// 80000014  FFF00313  addi t1, x0, -1      # t1 = 0xFFFF...FFFF
+// 80000018  3B031073  csrw pmpaddr0, t1    # top of range = max
+// 8000001C  00F00313  addi t1, x0, 0x0F    # R=1,W=1,X=1,A=01(TOR)
+// 80000020  3A031073  csrw pmpcfg0, t1     # PMP entry 0 ativa, cobre tudo
+// 80000024  F14022F3  csrr t0, mhartid
+// 80000028  02029663  bnez t0, +44 -> 0x80000054
+// 8000002C  00000317  auipc t1, 0          # t1 = 0x8000002C
+// 80000030  01C30313  addi t1, t1, 28  # t1 = S_ENTRY
+// 80000034  34131073  csrw mepc, t1
+// 80000038  00100313  addi t1, x0, 1
+// 8000003C  00B31313  slli t1, t1, 11      # t1 = 0x800 (MPP[11] = 1)
+// 80000040  30032073  csrrs zero, mstatus, t1  # mstatus.MPP = 01 (S)
+// 80000044  30200073  mret                 # M -> S, salta para mepc
+// 80000048  00000073  ecall                # S-mode: trap p/ M (mcause=9)
+// 8000004C  0000006F  jal x0, 0            # safety se ecall nao trapar
+// 80000050  0000006F  jal x0, 0  # padding
+// 80000054  00000317  auipc t1, 0          # t1 = 0x80000054
+// 80000058  01C30313  addi t1, t1, 28  # t1 = U_ENTRY
+// 8000005C  34131073  csrw mepc, t1
+// 80000060  00300313  addi t1, x0, 3
+// 80000064  00B31313  slli t1, t1, 11      # t1 = 0x1800 (mascara MPP[12:11])
+// 80000068  30033073  csrrc zero, mstatus, t1  # mstatus.MPP = 00 (U)
+// 8000006C  30200073  mret                 # M -> U
+// 80000070  00000073  ecall                # U-mode: trap p/ M (mcause=8)
+// 80000074  0000006F  jal x0, 0            # safety
+// 80000078  0000006F  jal x0, 0  # padding
+// 8000007C  0000006F  jal x0, 0  # padding
+// 80000080  342022F3  csrr t0, mcause      # ler causa
+// 80000084  00542823  sw t0, 0x10(s0)      # debug mcause @ 0x8000FF60
+// 80000088  00800E13  addi t3, x0, 8       # cause U-ecall
+// 8000008C  00900E93  addi t4, x0, 9       # cause S-ecall
+// 80000090  01C29463  bne t0, t3, +8       # se t0!=8, segue p/ teste cause=9
+// 80000094  0080006F  jal x0, +8           # cause=8 OK, pular bne
+// 80000098  01D29C63  bne t0, t4, +24 -> FAIL (mcause invalida)
+// 8000009C  00100313  addi t1, x0, 1
+// 800000A0  00642023  sw t1, 0(s0)         # TOHOST
+// 800000A4  0000006F  jal x0, 0            # spin success
+// 800000A8  0000006F  jal x0, 0  # padding
+// 800000AC  0000006F  jal x0, 0  # padding
+// 800000B0  0000006F  jal x0, 0            # FAIL spin
+//
+00010417
+F5040413
+00000317
+07830313
+30531073
+FFF00313
+3B031073
+00F00313
+3A031073
+F14022F3
+02029663
+00000317
+01C30313
+34131073
+00100313
+00B31313
+30032073
+30200073
+00000073
+0000006F
+0000006F
+00000317
+01C30313
+34131073
+00300313
+00B31313
+30033073
+30200073
+00000073
+0000006F
+0000006F
+0000006F
+342022F3
+00542823
+00800E13
+00900E93
+01C29463
+0080006F
+01D29C63
+00100313
+00642023
+0000006F
+0000006F
+0000006F
+0000006F

@@ -1,0 +1,101 @@
+// boot_e3.hex - External interrupt via PLIC mock (mip.MEIP)
+// Hart 0: SW @0xFFF1102000, delay, single check MEIP, tohost
+// Hart 1: SW @0xFFF1102080, delay, single check MEIP, tohost
+//
+// 80000000  00010417  auipc s0, 0x10       # s0 = 0x80010000
+// 80000004  F5040413  addi s0, s0, -176    # s0 = 0x8000FF50 (tohost)
+// 80000008  F14022F3  csrr t0, mhartid
+// 8000000C  04029E63  bnez t0, +92 -> 0x80000068
+// 80000010  0FF00393  addi t2, x0, 0xFF
+// 80000014  02039393  slli t2, t2, 32      # t2 = 0xFF_00000000
+// 80000018  F1102E37  lui t3, 0xF1102      # PLIC enable base low
+// 8000001C  020E1E13  slli t3, t3, 32
+// 80000020  020E5E13  srli t3, t3, 32      # zero-extend low 32
+// 80000024  01C3E3B3  or t2, t2, t3        # t2 = 0xFF_F1102000
+// 80000028  00100E13  addi t3, x0, 1       # enable bit
+// 8000002C  01C3A023  sw t3, 0(t2)         # PLIC enable[hart 0] = 1
+// 80000030  00742823  sw t2, 0x10(s0)      # debug enable addr
+// 80000034  2BC00F13  addi t5, x0, 700      # delay arit
+// 80000038  FFFF0F13  addi t5, t5, -1
+// 8000003C  FE0F1EE3  bnez t5, -4          # delay loop
+// 80000040  34402FF3  csrr t6, mip
+// 80000044  03F42023  sw t6, 0x20(s0)      # debug mip lido
+// 80000048  00100E93  addi t4, x0, 1
+// 8000004C  00BE9E93  slli t4, t4, 11      # t4 = 0x800 (MEIP mask)
+// 80000050  01DFFF33  and t5, t6, t4       # bit 11 = MEIP
+// 80000054  100F0063  beqz t5, +256        # FAIL se MEIP=0
+// 80000058  00100313  addi t1, x0, 1
+// 8000005C  00642023  sw t1, 0(s0)         # TOHOST hart 0
+// 80000060  0000006F  jal x0, 0            # spin success
+// 80000064  0000006F  jal x0, 0  # padding
+// 80000068  0FF00393  addi t2, x0, 0xFF
+// 8000006C  02039393  slli t2, t2, 32      # t2 = 0xFF_00000000
+// 80000070  F1102E37  lui t3, 0xF1102      # PLIC enable base low
+// 80000074  020E1E13  slli t3, t3, 32
+// 80000078  020E5E13  srli t3, t3, 32      # zero-extend low 32
+// 8000007C  01C3E3B3  or t2, t2, t3        # t2 = 0xFF_F1102000
+// 80000080  08038393  addi t2, t2, 128      # t2 += offset hart
+// 80000084  00100E13  addi t3, x0, 1       # enable bit
+// 80000088  01C3A023  sw t3, 0(t2)         # PLIC enable[hart 1] = 1
+// 8000008C  00742C23  sw t2, 0x18(s0)      # debug enable addr
+// 80000090  2BC00F13  addi t5, x0, 700      # delay arit
+// 80000094  FFFF0F13  addi t5, t5, -1
+// 80000098  FE0F1EE3  bnez t5, -4          # delay loop
+// 8000009C  34402FF3  csrr t6, mip
+// 800000A0  03F42023  sw t6, 0x20(s0)      # debug mip lido
+// 800000A4  00100E93  addi t4, x0, 1
+// 800000A8  00BE9E93  slli t4, t4, 11      # t4 = 0x800 (MEIP mask)
+// 800000AC  01DFFF33  and t5, t6, t4       # bit 11 = MEIP
+// 800000B0  100F0063  beqz t5, +256        # FAIL se MEIP=0
+// 800000B4  00100313  addi t1, x0, 1
+// 800000B8  00642023  sw t1, 0(s0)         # TOHOST hart 1
+// 800000BC  0000006F  jal x0, 0            # spin success
+//
+00010417
+F5040413
+F14022F3
+04029E63
+0FF00393
+02039393
+F1102E37
+020E1E13
+020E5E13
+01C3E3B3
+00100E13
+01C3A023
+00742823
+2BC00F13
+FFFF0F13
+FE0F1EE3
+34402FF3
+03F42023
+00100E93
+00BE9E93
+01DFFF33
+100F0063
+00100313
+00642023
+0000006F
+0000006F
+0FF00393
+02039393
+F1102E37
+020E1E13
+020E5E13
+01C3E3B3
+08038393
+00100E13
+01C3A023
+00742C23
+2BC00F13
+FFFF0F13
+FE0F1EE3
+34402FF3
+03F42023
+00100E93
+00BE9E93
+01DFFF33
+100F0063
+00100313
+00642023
+0000006F

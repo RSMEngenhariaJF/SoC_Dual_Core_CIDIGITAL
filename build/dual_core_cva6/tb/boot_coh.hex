@@ -1,0 +1,40 @@
+// False-sharing coherence boot firmware for OpenPiton 2x1 CVA6
+// Both tiles boot at 0x80000000 and diverge via csrr mhartid.
+//
+// 0x80000000  auipc t2, 2          t2 = 0x80002000  (false-sharing base)
+// 0x80000004  auipc t1, 0x10       t1 = 0x80010004
+// 0x80000008  addi  t1,t1,-180     t1 = 0x8000FF50  (tohost addr)
+// 0x8000000C  csrr  t0, mhartid
+// 0x80000010  bnez  t0, 24         hart1 -> 0x80000028
+// -- hart0 --
+// 0x80000014  addi  t3,x0,10
+// 0x80000018  sw    t3, 0(t2)      -> 0x80002000
+// 0x8000001C  addi  t3,t3,-1
+// 0x80000020  bnez  t3, -8
+// 0x80000024  jal   x0, 20         -> 0x80000038
+// -- hart1 --
+// 0x80000028  addi  t3,x0,10
+// 0x8000002C  sw    t3, 8(t2)      -> 0x80002008 (same cache line)
+// 0x80000030  addi  t3,t3,-1
+// 0x80000034  bnez  t3, -8
+// -- both --
+// 0x80000038  addi  t4,x0,1
+// 0x8000003C  sw    t4, 0(t1)      -> tohost (GOOD_TRAP)
+// 0x80000040  jal   x0, 0          spin
+00002397
+00010317
+F4C30313
+F14022F3
+00029C63
+00A00E13
+01C3A023
+FFFE0E13
+FE0E1CE3
+0140006F
+00A00E13
+01C3A423
+FFFE0E13
+FE0E1CE3
+00100E93
+01D32023
+0000006F

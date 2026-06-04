@@ -1,0 +1,73 @@
+// boot_e2.hex - IPI via msip[1] do CLINT (polling)
+// Hart 0: SW 1 em 0xFFF1020004 (msip[1])
+// Hart 1: polling em mip ate ver MSIP=1
+//
+// 80000000  00010417  auipc s0, 0x10       # s0 = 0x80010000
+// 80000004  F5040413  addi s0, s0, -176    # s0 = 0x8000FF50 (tohost)
+// 80000008  F14022F3  csrr t0, mhartid
+// 8000000C  04029C63  bnez t0, +88 -> 0x80000064
+// 80000010  03200F13  addi t5, x0, 50      # delay inicial
+// 80000014  FFFF0F13  addi t5, t5, -1
+// 80000018  FE0F1EE3  bnez t5, -4
+// 8000001C  0FF00393  addi t2, x0, 0xFF    # t2 = 0xFF
+// 80000020  02039393  slli t2, t2, 32      # t2 = 0xFF_00000000
+// 80000024  F1020E37  lui t3, 0xF1020      # t3 = 0xFFFFFFFF_F1020000 (sign-ext)
+// 80000028  020E1E13  slli t3, t3, 32      # t3 = 0xF1020000_00000000
+// 8000002C  020E5E13  srli t3, t3, 32      # t3 = 0x00000000_F1020000 (zero-ext)
+// 80000030  01C3E3B3  or t2, t2, t3        # t2 = 0xFF_F1020000 = msip[0]
+// 80000034  00438393  addi t2, t2, 4       # t2 = msip[1]
+// 80000038  02742023  sw t2, 0x20(s0)      # debug: msip[1] addr
+// 8000003C  00100E13  addi t3, x0, 1
+// 80000040  01C3A023  sw t3, 0(t2)         # MSIP write -> CLINT
+// 80000044  0C800F13  addi t5, x0, 200
+// 80000048  FFFF0F13  addi t5, t5, -1
+// 8000004C  FE0F1EE3  bnez t5, -4
+// 80000050  00100313  addi t1, x0, 1
+// 80000054  00642023  sw t1, 0(s0)         # TOHOST hart 0
+// 80000058  0000006F  jal x0, 0            # spin success
+// 8000005C  0000006F  jal x0, 0  # padding (apos hart 0 spin)
+// 80000060  0000006F  jal x0, 0  # padding (apos hart 0 spin)
+// 80000064  09900E93  addi t4, x0, 0x99    # marker
+// 80000068  01D42C23  sw t4, 0x18(s0)      # debug: hart 1 em polling
+// 8000006C  34402FF3  csrr t6, mip
+// 80000070  008FFF13  andi t5, t6, 8       # bit 3 = MSIP
+// 80000074  FE0F0CE3  beqz t5, -8   # loop ate MSIP=1
+// 80000078  01F42823  sw t6, 0x10(s0)      # debug: mip final
+// 8000007C  00100313  addi t1, x0, 1
+// 80000080  00642023  sw t1, 0(s0)         # TOHOST hart 1
+// 80000084  0000006F  jal x0, 0            # spin success
+//
+00010417
+F5040413
+F14022F3
+04029C63
+03200F13
+FFFF0F13
+FE0F1EE3
+0FF00393
+02039393
+F1020E37
+020E1E13
+020E5E13
+01C3E3B3
+00438393
+02742023
+00100E13
+01C3A023
+0C800F13
+FFFF0F13
+FE0F1EE3
+00100313
+00642023
+0000006F
+0000006F
+0000006F
+09900E93
+01D42C23
+34402FF3
+008FFF13
+FE0F0CE3
+01F42823
+00100313
+00642023
+0000006F

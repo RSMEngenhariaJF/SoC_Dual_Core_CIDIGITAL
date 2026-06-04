@@ -1,0 +1,100 @@
+// boot_e6.hex - FPU basica (fadd, fmul, fdiv)
+// Hart 0: fadd.s 1.0+2.0==3.0
+// Hart 1: fmul.s 2.0*2.0==4.0 ; fdiv.s 4.0/2.0==2.0
+// FPU habilitada via mstatus.FS=01.
+//
+// 80000000  00010417  auipc s0, 0x10       # s0 = 0x80010000 (auipc no addr 0)
+// 80000004  F5040413  addi s0, s0, -176    # s0 = 0x8000FF50 (tohost)
+// 80000008  000022B7  lui t0, 0x2          # t0 = 0x2000 (FS=01 mask)
+// 8000000C  3002A073  csrrs x0, mstatus, t0  # enable FPU (FS=Initial)
+// 80000010  F14022F3  csrr t0, mhartid
+// 80000014  04029263  bnez t0, +68 -> 0x80000058
+// 80000018  3F8002B7  lui t0, 0x3F800      # t0 = 0x3F800000 (1.0)
+// 8000001C  F00280D3  fmv.w.x f1, t0
+// 80000020  400002B7  lui t0, 0x40000      # t0 = 0x40000000 (2.0)
+// 80000024  F0028153  fmv.w.x f2, t0
+// 80000028  002081D3  fadd.s f3, f1, f2    # 1.0 + 2.0 = 3.0
+// 8000002C  E0018E53  fmv.x.w t3, f3
+// 80000030  40400EB7  lui t4, 0x40400      # esperado 0x40400000 (3.0)
+// 80000034  09DE1263  bne t3, t4, +132 -> FAIL
+// 80000038  00100493  addi s1, x0, 1
+// 8000003C  00942023  sw s1, 0(s0)         # TOHOST
+// 80000040  0000006F  jal x0, 0            # spin success
+// 80000044  0000006F  jal x0, 0  # padding (apos hart 0 spin success)
+// 80000048  0000006F  jal x0, 0  # padding (apos hart 0 spin success)
+// 8000004C  0000006F  jal x0, 0  # padding (apos hart 0 spin success)
+// 80000050  0000006F  jal x0, 0  # padding (apos hart 0 spin success)
+// 80000054  0000006F  jal x0, 0  # padding (apos hart 0 spin success)
+// 80000058  0C800F13  addi t5, x0, 200     # delay
+// 8000005C  FFFF0F13  addi t5, t5, -1
+// 80000060  FE0F1EE3  bnez t5, -4          # delay loop
+// 80000064  400002B7  lui t0, 0x40000      # t0 = 0x40000000 (2.0)
+// 80000068  F00280D3  fmv.w.x f1, t0
+// 8000006C  F0028153  fmv.w.x f2, t0       # f2 = 2.0
+// 80000070  102081D3  fmul.s f3, f1, f2    # 2.0 * 2.0 = 4.0
+// 80000074  E0018E53  fmv.x.w t3, f3
+// 80000078  40800EB7  lui t4, 0x40800      # esperado 0x40800000 (4.0)
+// 8000007C  03DE1E63  bne t3, t4, +60 -> FAIL
+// 80000080  182181D3  fdiv.s f3, f3, f2    # 4.0 / 2.0 = 2.0
+// 80000084  E0018E53  fmv.x.w t3, f3
+// 80000088  40000EB7  lui t4, 0x40000      # esperado 0x40000000 (2.0)
+// 8000008C  03DE1663  bne t3, t4, +44 -> FAIL
+// 80000090  00100493  addi s1, x0, 1
+// 80000094  00942023  sw s1, 0(s0)         # TOHOST
+// 80000098  0000006F  jal x0, 0            # spin success
+// 8000009C  0000006F  jal x0, 0  # padding
+// 800000A0  0000006F  jal x0, 0  # padding
+// 800000A4  0000006F  jal x0, 0  # padding
+// 800000A8  0000006F  jal x0, 0  # padding
+// 800000AC  0000006F  jal x0, 0  # padding
+// 800000B0  0000006F  jal x0, 0  # padding
+// 800000B4  0000006F  jal x0, 0  # padding
+// 800000B8  0000006F  jal x0, 0            # FAIL spin
+//
+00010417
+F5040413
+000022B7
+3002A073
+F14022F3
+04029263
+3F8002B7
+F00280D3
+400002B7
+F0028153
+002081D3
+E0018E53
+40400EB7
+09DE1263
+00100493
+00942023
+0000006F
+0000006F
+0000006F
+0000006F
+0000006F
+0000006F
+0C800F13
+FFFF0F13
+FE0F1EE3
+400002B7
+F00280D3
+F0028153
+102081D3
+E0018E53
+40800EB7
+03DE1E63
+182181D3
+E0018E53
+40000EB7
+03DE1663
+00100493
+00942023
+0000006F
+0000006F
+0000006F
+0000006F
+0000006F
+0000006F
+0000006F
+0000006F
+0000006F

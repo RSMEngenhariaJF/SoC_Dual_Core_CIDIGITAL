@@ -1,0 +1,94 @@
+// boot_a1.hex - True sharing com spinlock (3 iter por hart)
+// Hart 0 + Hart 1 cada um incrementa 3x via AMOADD dentro
+// de secao critica protegida por spinlock LR/SC.
+// Final esperado: counter == 6.
+//
+// 80000000  00002397  auipc t2, 2          # t2 = 0x80002000 (counter)
+// 80000004  00010317  auipc t1, 0x10
+// 80000008  F4C30313  addi t1, t1, -180    # t1 = 0x8000FF50 (tohost)
+// 8000000C  04038413  addi s0, t2, 64      # s0 = 0x80002040 (lock)
+// 80000010  F14022F3  csrr t0, mhartid
+// 80000014  04029263  bnez t0, +68  -> 0x80000058
+// 80000018  01E00F13  addi t5, x0, 30      # delay
+// 8000001C  FFFF0F13  addi t5, t5, -1
+// 80000020  FE0F1EE3  bnez t5, -4          # delay loop
+// 80000024  00300F13  addi t5, x0, 3       # iter counter
+// 80000028  10042FAF  lr.w t6, (s0)
+// 8000002C  FE0F9EE3  bnez t6, -4          # retry if locked
+// 80000030  00100E13  addi t3, x0, 1
+// 80000034  19C422AF  sc.w t0, t3, (s0)
+// 80000038  FE0298E3  bnez t0, -16         # retry if SC failed
+// 8000003C  01C3AFAF  amoadd.w t6, t3, (t2)  # counter += 1
+// 80000040  00042023  sw x0, 0(s0)         # release lock
+// 80000044  FFFF0F13  addi t5, t5, -1      # iter--
+// 80000048  FE0F10E3  bnez t5, -32  # back to loop_start
+// 8000004C  00100E93  addi t4, x0, 1
+// 80000050  01D32023  sw t4, 0(t1)         # TOHOST
+// 80000054  0000006F  jal x0, 0            # spin
+// 80000058  0C800F13  addi t5, x0, 200     # long delay (hart 0 ja terminou)
+// 8000005C  FFFF0F13  addi t5, t5, -1
+// 80000060  FE0F1EE3  bnez t5, -4          # delay loop
+// 80000064  00300F13  addi t5, x0, 3       # iter counter
+// 80000068  10042FAF  lr.w t6, (s0)
+// 8000006C  FE0F9EE3  bnez t6, -4          # retry if locked
+// 80000070  00100E13  addi t3, x0, 1
+// 80000074  19C422AF  sc.w t0, t3, (s0)
+// 80000078  FE0298E3  bnez t0, -16         # retry if SC failed
+// 8000007C  01C3AFAF  amoadd.w t6, t3, (t2)  # counter += 1
+// 80000080  00042023  sw x0, 0(s0)         # release lock
+// 80000084  FFFF0F13  addi t5, t5, -1
+// 80000088  FE0F10E3  bnez t5, -32  # back to loop_start
+// 8000008C  0003AFAF  amoadd.w t6, x0, (t2)  # READ counter (AMO+0)
+// 80000090  00600E93  addi t4, x0, 6       # expected counter
+// 80000094  01DF9C63  bne t6, t4, +24 -> FAIL (counter != 6)
+// 80000098  00100E93  addi t4, x0, 1
+// 8000009C  01D32023  sw t4, 0(t1)         # TOHOST
+// 800000A0  0000006F  jal x0, 0            # spin success
+// 800000A4  0000006F  jal x0, 0  # padding
+// 800000A8  0000006F  jal x0, 0  # padding
+// 800000AC  0000006F  jal x0, 0            # FAIL spin
+//
+00002397
+00010317
+F4C30313
+04038413
+F14022F3
+04029263
+01E00F13
+FFFF0F13
+FE0F1EE3
+00300F13
+10042FAF
+FE0F9EE3
+00100E13
+19C422AF
+FE0298E3
+01C3AFAF
+00042023
+FFFF0F13
+FE0F10E3
+00100E93
+01D32023
+0000006F
+0C800F13
+FFFF0F13
+FE0F1EE3
+00300F13
+10042FAF
+FE0F9EE3
+00100E13
+19C422AF
+FE0298E3
+01C3AFAF
+00042023
+FFFF0F13
+FE0F10E3
+0003AFAF
+00600E93
+01DF9C63
+00100E93
+01D32023
+0000006F
+0000006F
+0000006F
+0000006F

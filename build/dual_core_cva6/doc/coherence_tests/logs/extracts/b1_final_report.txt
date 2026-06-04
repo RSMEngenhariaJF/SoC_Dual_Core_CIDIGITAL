@@ -1,0 +1,100 @@
+[7755000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7755000] [ICACHE] state 1->2 flush_cnt=0 cache_en=1
+[7755000] [ICACHE] FETCH REQ vaddr=0x80000044
+[7765000 ns] H0_COMMIT pc=0x000000008000002c     @cyc=756
+[7765000] [ICACHE] READ: fv=1 kill2=1 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7765000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7775000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7775000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7785000 ns] H0_COMMIT pc=0x000000008000002c     @cyc=758
+[7785000] [ICACHE] READ: fv=1 kill2=1 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7785000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7795000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7795000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7805000 ns] H0_COMMIT pc=0x000000008000002c     @cyc=760
+[7805000] [ICACHE] READ: fv=1 kill2=1 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7805000] [ICACHE] READ: fv=1 kill2=0 spec=1 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7815000 ns] H1_COMMIT pc=0x0000000080000044     @cyc=761
+[7815000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7815000] [ICACHE] READ: fv=1 kill2=1 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7825000 ns] H0_COMMIT pc=0x000000008000002c     @cyc=762
+[7825000 ns] H1_COMMIT pc=0x0000000080000048     @cyc=762
+[7825000] [ICACHE] READ: fv=1 kill2=1 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7825000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7835000 ns] H1_COMMIT pc=0x000000008000004c     @cyc=763
+[7835000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7835000] [ICACHE] READ: fv=1 kill2=1 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7845000 ns] H0_COMMIT pc=0x000000008000002c     @cyc=764
+[7845000] [ICACHE] READ: fv=1 kill2=1 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7845000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7855000 ns] SB_TRAP tile=1 addr=0x8000ff50 @cyc=765
+[7855000 ns] SHADOW_WR tile=1 addr=0x8000ff50 idx=8170 data=0x0000000000000001
+[7855000 ns] H1_COMMIT pc=0x0000000080000050     @cyc=765
+[7855000 ns] SB1_STORE addr=0x8000ff50 data=0x0000000000000001 @cyc=765
+[7855000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7855000] [ICACHE] READ: fv=1 kill2=1 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6_v2/scoreboard/uvmt_opc_coh2_scoreboard.sv(189) @ 7855000: uvm_test_top.env.scoreboard [OPC_SB_V2] FALSE_SHARING detectado: linha=0x008000ff40 tile=1 addr=0x0000008000ff50 tiles_anteriores=1
+[7865000 ns] H0_COMMIT pc=0x000000008000002c     @cyc=766
+[7865000 ns] *** GOOD TRAP AMBOS TILES (PASS) *** @cyc=766
+[7865000] [ICACHE] READ: fv=1 kill2=1 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7865000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7865000] [WBUF] STORE_REQ tag=0x10001f idx=0x750 data=0x0000000000000001 gnt=1 rdy=1 ni_conflict=0
+[7875000 ns] H1_COMMIT pc=0x0000000080000054     @cyc=767
+[7875000] [ICACHE] READ: fv=1 kill2=0 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7875000] [ICACHE] READ: fv=1 kill2=1 spec=0 addr_ni=0 clhit=1 ex_vld=0 inv_q=0 flush_d=0 mem_req=0 mem_ack=0
+[7875000] [MISSUNIT] miss_req=100 miss_we=100 FSM=0 rdwr_coll=0 wbuf_empty=0
+[7875000] [MISSUNIT] MEM_REQ rtype=0 paddr=8000ff50
+[7875000] [WBUF] MISS_REQ paddr=8000ff50 nc=0 dirty=00000001 free_tx=1 ack=1
+[7875000] [L15ADAP] DCACHE->FIFO rtype=0 paddr=0x008000ff50 data=0x0000000100000001
+UVM_INFO C:/Xilinx/2025.1/Vivado/data/system_verilog/uvm_1.2/xlnx_uvm_package.sv(19968) @ 7875000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/env/agents/status/uvmt_opc_status_mon.sv(79) @ 7875000: uvm_test_top.env.status_agent.mon [OPC_STATUS_MON] >>> HIT GOOD TRAP - Tile 0 (ciclo 767) <<<
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/scoreboard/uvmt_opc_scoreboard.sv(256) @ 7875000: uvm_test_top.env.scoreboard [OPC_SB] GOOD TRAP tile=0. Completados=0x1 / Esperados=0x1
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/cov/uvmt_opc_cov_model.sv(143) @ 7875000: uvm_test_top.env.cov_model [OPC_COV] Cobertura: L15_req=0.0% NoC=0.0% AMO=0.0% MESI=0.0%
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/env/agents/l15_tri/uvmt_opc_l15_tri_mon.sv(149) @ 7875000: uvm_test_top.env.l15_tri_agent.mon [OPC_L15_MON] L1.5 TRI: LOAD=3 STORE=2 IFILL=0 AMO=0 FLUSH=0 INVAL=0
+UVM_WARNING C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/env/agents/l15_tri/uvmt_opc_l15_tri_mon.sv(153) @ 7875000: uvm_test_top.env.l15_tri_agent.mon [OPC_L15_MON] 5 requisicao(oes) sem resposta ao fim da simulacao
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/env/agents/noc/uvmt_opc_noc_mon.sv(163) @ 7875000: uvm_test_top.env.noc_agent.mon [OPC_NOC_MON] Resumo NoC: NoC1=12 | NoC2=0 | NoC3=0 | Invalidacoes=0
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/scoreboard/uvmt_opc_scoreboard.sv(285) @ 7875000: uvm_test_top.env.scoreboard [OPC_SB] === SCOREBOARD FINAL ===
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/scoreboard/uvmt_opc_scoreboard.sv(286) @ 7875000: uvm_test_top.env.scoreboard [OPC_SB]   Verificacoes OK  : 0
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/scoreboard/uvmt_opc_scoreboard.sv(287) @ 7875000: uvm_test_top.env.scoreboard [OPC_SB]   Verificacoes FAIL: 0
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/scoreboard/uvmt_opc_scoreboard.sv(288) @ 7875000: uvm_test_top.env.scoreboard [OPC_SB]   GOOD TRAPs       : 1
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/scoreboard/uvmt_opc_scoreboard.sv(289) @ 7875000: uvm_test_top.env.scoreboard [OPC_SB]   BAD TRAPs        : 0
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/scoreboard/uvmt_opc_scoreboard.sv(290) @ 7875000: uvm_test_top.env.scoreboard [OPC_SB]   Shadow mem lines : 0
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6_v2/scoreboard/uvmt_opc_coh2_scoreboard.sv(233) @ 7875000: uvm_test_top.env.scoreboard [OPC_SB_V2] === SCOREBOARD V2 - METRICAS AVANCADAS ===
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6_v2/scoreboard/uvmt_opc_coh2_scoreboard.sv(239) @ 7875000: uvm_test_top.env.scoreboard [OPC_SB_V2]   Stores por tile:  tile0=2  tile1=1
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6_v2/scoreboard/uvmt_opc_coh2_scoreboard.sv(245) @ 7875000: uvm_test_top.env.scoreboard [OPC_SB_V2]   INVAL_REQ: tile0=0  tile1=0
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6_v2/scoreboard/uvmt_opc_coh2_scoreboard.sv(249) @ 7875000: uvm_test_top.env.scoreboard [OPC_SB_V2]   INVAL_ACK: tile0=0  tile1=0
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6_v2/scoreboard/uvmt_opc_coh2_scoreboard.sv(262) @ 7875000: uvm_test_top.env.scoreboard [OPC_SB_V2]   Latencia INVAL: nenhum par REQ/ACK completo observado
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6_v2/scoreboard/uvmt_opc_coh2_scoreboard.sv(269) @ 7875000: uvm_test_top.env.scoreboard [OPC_SB_V2]   False sharing events: 1 | linhas multi-tile: 2
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6_v2/scoreboard/uvmt_opc_coh2_scoreboard.sv(275) @ 7875000: uvm_test_top.env.scoreboard [OPC_SB_V2]   Finish mask: esperado=0x1 completado=0x1
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6/env/agents/status/uvmt_opc_status_mon.sv(133) @ 7875000: uvm_test_top.env.status_agent.mon [OPC_STATUS_MON] Tiles completados: 0x1 / esperados: 0x1
+UVM_INFO C:/Users/rafae/Documents/SoC_dual_core/openpiton/build/dual_core_cva6/uvmt_openpiton_cva6_v2/tests/uvmt_opc_coh2_test.sv(118) @ 7875000: uvm_test_top [OPC_COH2_TEST] === TESTE V2 CONCLUIDO ===
+UVM_INFO C:/Xilinx/2025.1/Vivado/data/system_verilog/uvm_1.2/xlnx_uvm_package.sv(13673) @ 7875000: reporter [UVM/REPORT/SERVER] 
+--- UVM Report Summary ---
+
+** Report counts by severity
+UVM_INFO :   38
+UVM_WARNING :    1
+UVM_ERROR :    0
+UVM_FATAL :    0
+** Report counts by id
+[NO_DPI_TSTNAME]     1
+[OPC_CLK_DRV]     2
+[OPC_CLK_MON]     1
+[OPC_COH2_ENV]     1
+[OPC_COH2_SEQ]     4
+[OPC_COH2_TEST]     2
+[OPC_COV]     1
+[OPC_L15_MON]     3
+[OPC_NOC_MON]     2
+[OPC_SB]     7
+[OPC_SB_V2]     8
+[OPC_STATUS_MON]     3
+[RNTST]     1
+[TEST_DONE]     1
+[UVM/COMP/NAMECHECK]     1
+[UVM/RELNOTES]     1
+
+WARNING: The Functional Coverage Database has not been updated during simulation. Please recheck testbench to confirm that covergroups are being instantiated correctly and rerun simulation.
+$finish called at time : 7875 ns : File "C:/Xilinx/2025.1/Vivado/data/system_verilog/uvm_1.2/xlnx_uvm_package.sv" Line 18699
+exit
+INFO: [Common 17-206] Exiting xsim at Mon Jun  1 12:45:23 2026...

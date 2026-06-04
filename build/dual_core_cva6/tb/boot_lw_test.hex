@@ -1,0 +1,25 @@
+// Smoke test minimo: verifica se LW (load word) funciona no xsim 2025.1.
+// Memoria de 11 dias atras dizia que LW crashava — testamos novamente.
+//
+// Programa (ambos os harts executam igual, sem divergencia):
+//   0x80000000  auipc t2, 2          ; t2 = 0x80002000 (scratch)
+//   0x80000004  auipc t1, 0x10       ; t1 = 0x80010004
+//   0x80000008  addi  t1,t1,-180     ; t1 = 0x8000FF50 (tohost)
+//   0x8000000C  addi  t3, x0, 42     ; t3 = 42
+//   0x80000010  sw    t3, 0(t2)      ; scratch = 42  (store ok pelo bypass)
+//   0x80000014  lw    t4, 0(t2)      ; t4 = scratch  <<< TESTE CRITICO
+//   0x80000018  addi  t5, x0, 1
+//   0x8000001C  sw    t5, 0(t1)      ; tohost = 1  (GOOD_TRAP)
+//   0x80000020  jal   x0, 0          ; spin
+//
+// Se LW crashar: vamos ver FATAL_ERROR no log do xsim.
+// Se sobreviver: combined GOOD_TRAP fira e A2 fica viavel.
+00002397
+00010317
+F4C30313
+02A00E13
+01C3A023
+0003AE83
+00100F13
+01E32023
+0000006F

@@ -1,0 +1,75 @@
+// boot_b3.hex - AMO em regiao NC (0x40002000)
+// Hart 0: amoadd.w +1 (espera old=0)
+// Hart 1: amoswap.w 7 (espera old=1, escrito por hart 0)
+//
+// 80000000  00010417  auipc s0, 0x10       # s0 = 0x80010000 (auipc no addr 0)
+// 80000004  F5040413  addi s0, s0, -176    # s0 = 0x8000FF50 (tohost)
+// 80000008  400023B7  lui t2, 0x40002      # t2 = 0x40002000 (NC addr)
+// 8000000C  F14022F3  csrr t0, mhartid
+// 80000010  02029863  bnez t0, +48 -> 0x80000040
+// 80000014  00100E13  addi t3, x0, 1
+// 80000018  01C3AFAF  amoadd.w t6, t3, (t2)  # NC: +1, espera old=0
+// 8000001C  00000E93  addi t4, x0, 0       # esperado old=0
+// 80000020  07DF9463  bne t6, t4, +104 -> FAIL
+// 80000024  00100493  addi s1, x0, 1
+// 80000028  00942023  sw s1, 0(s0)         # TOHOST
+// 8000002C  0000006F  jal x0, 0            # spin success
+// 80000030  0000006F  jal x0, 0  # padding
+// 80000034  0000006F  jal x0, 0  # padding
+// 80000038  0000006F  jal x0, 0  # padding
+// 8000003C  0000006F  jal x0, 0  # padding
+// 80000040  19000F13  addi t5, x0, 400     # long delay
+// 80000044  FFFF0F13  addi t5, t5, -1
+// 80000048  FE0F1EE3  bnez t5, -4          # delay loop
+// 8000004C  00700E13  addi t3, x0, 7
+// 80000050  09C3AFAF  amoswap.w t6, t3, (t2)  # swap, espera old=1
+// 80000054  00100E93  addi t4, x0, 1       # esperado old=1
+// 80000058  03DF9863  bne t6, t4, +48 -> FAIL
+// 8000005C  00100493  addi s1, x0, 1
+// 80000060  00942023  sw s1, 0(s0)         # TOHOST
+// 80000064  0000006F  jal x0, 0            # spin success
+// 80000068  0000006F  jal x0, 0  # padding
+// 8000006C  0000006F  jal x0, 0  # padding
+// 80000070  0000006F  jal x0, 0  # padding
+// 80000074  0000006F  jal x0, 0  # padding
+// 80000078  0000006F  jal x0, 0  # padding
+// 8000007C  0000006F  jal x0, 0  # padding
+// 80000080  0000006F  jal x0, 0  # padding
+// 80000084  0000006F  jal x0, 0  # padding
+// 80000088  0000006F  jal x0, 0            # FAIL spin
+//
+00010417
+F5040413
+400023B7
+F14022F3
+02029863
+00100E13
+01C3AFAF
+00000E93
+07DF9463
+00100493
+00942023
+0000006F
+0000006F
+0000006F
+0000006F
+0000006F
+19000F13
+FFFF0F13
+FE0F1EE3
+00700E13
+09C3AFAF
+00100E93
+03DF9863
+00100493
+00942023
+0000006F
+0000006F
+0000006F
+0000006F
+0000006F
+0000006F
+0000006F
+0000006F
+0000006F
+0000006F

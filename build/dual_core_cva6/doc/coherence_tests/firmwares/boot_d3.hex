@@ -1,0 +1,73 @@
+// boot_d3.hex - Barrier (join, 2 harts)
+// Cada hart faz AMOADD no contador, fence rw,rw e polling
+// (AMOADD+0) ate ver counter==2; entao tohost.
+//
+// 80000000  00010417  auipc s0, 0x10       # s0 = 0x80010000
+// 80000004  F5040413  addi s0, s0, -176    # s0 = 0x8000FF50 (tohost)
+// 80000008  F14022F3  csrr t0, mhartid
+// 8000000C  04029263  bnez t0, +68 -> 0x80000050
+// 80000010  01E00F13  addi t5, x0, 30    # hart 0 delay
+// 80000014  FFFF0F13  addi t5, t5, -1
+// 80000018  FE0F1EE3  bnez t5, -4
+// 8000001C  00002397  auipc t2, 2
+// 80000020  FE438393  addi t2, t2, -28   # t2 = 0x80002000 (barrier)
+// 80000024  00100E13  addi t3, x0, 1
+// 80000028  01C3AFAF  amoadd.w t6, t3, (t2)  # barrier++
+// 8000002C  0330000F  fence rw,rw          # release/acquire explicito
+// 80000030  0003AFAF  amoadd.w t6, x0, (t2)  # le counter
+// 80000034  00200E93  addi t4, x0, 2       # esperado: 2 harts
+// 80000038  FFDF9CE3  bne t6, t4, -8  # espera ate t6==2
+// 8000003C  00100313  addi t1, x0, 1
+// 80000040  00642023  sw t1, 0(s0)         # TOHOST hart 0
+// 80000044  0000006F  jal x0, 0            # spin success
+// 80000048  0000006F  jal x0, 0  # padding
+// 8000004C  0000006F  jal x0, 0  # padding
+// 80000050  05000F13  addi t5, x0, 80    # hart 1 delay
+// 80000054  FFFF0F13  addi t5, t5, -1
+// 80000058  FE0F1EE3  bnez t5, -4
+// 8000005C  00002397  auipc t2, 2
+// 80000060  FA438393  addi t2, t2, -92   # t2 = 0x80002000 (barrier)
+// 80000064  00100E13  addi t3, x0, 1
+// 80000068  01C3AFAF  amoadd.w t6, t3, (t2)  # barrier++
+// 8000006C  0330000F  fence rw,rw          # release/acquire explicito
+// 80000070  0003AFAF  amoadd.w t6, x0, (t2)  # le counter
+// 80000074  00200E93  addi t4, x0, 2       # esperado: 2 harts
+// 80000078  FFDF9CE3  bne t6, t4, -8  # espera ate t6==2
+// 8000007C  00100313  addi t1, x0, 1
+// 80000080  00642023  sw t1, 0(s0)         # TOHOST hart 1
+// 80000084  0000006F  jal x0, 0            # spin success
+//
+00010417
+F5040413
+F14022F3
+04029263
+01E00F13
+FFFF0F13
+FE0F1EE3
+00002397
+FE438393
+00100E13
+01C3AFAF
+0330000F
+0003AFAF
+00200E93
+FFDF9CE3
+00100313
+00642023
+0000006F
+0000006F
+0000006F
+05000F13
+FFFF0F13
+FE0F1EE3
+00002397
+FA438393
+00100E13
+01C3AFAF
+0330000F
+0003AFAF
+00200E93
+FFDF9CE3
+00100313
+00642023
+0000006F

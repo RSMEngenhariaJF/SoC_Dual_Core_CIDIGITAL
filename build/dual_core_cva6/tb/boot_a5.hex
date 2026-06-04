@@ -1,0 +1,71 @@
+// boot_a5.hex - Multi-line stress (2 linhas por hart + read cross-tile)
+// Layout:  0x80002000 idx 1024  linha 0 (hart 0 -> 0x10)
+//          0x80002040 idx 1032  linha 1 (hart 0 -> 0x11)
+//          0x80002080 idx 1040  linha 2 (hart 1 -> 0x20)
+//          0x800020C0 idx 1048  linha 3 (hart 1 -> 0x21)
+// Hart 0 le linha 2 (hart1 escreveu); hart 1 le linha 0 (hart0 escreveu).
+//
+// 80000000  00002397  auipc t2, 2          # t2 = 0x80002000
+// 80000004  00010317  auipc t1, 0x10
+// 80000008  F4C30313  addi  t1, t1, -180   # t1 = 0x8000FF50
+// 8000000C  F14022F3  csrr  t0, mhartid
+// 80000010  02029C63  bnez  t0, +56  -> 0x80000048
+// 80000014  01000E13  addi t3, x0, 0x10
+// 80000018  01C3A023  sw t3, 0(t2)         # linha 0 idx 1024 = 0x10
+// 8000001C  01100E13  addi t3, x0, 0x11
+// 80000020  05C3A023  sw t3, 64(t2)        # linha 1 idx 1032 = 0x11
+// 80000024  0C800F13  addi t5, x0, 200     # delay counter
+// 80000028  FFFF0F13  addi t5, t5, -1
+// 8000002C  FE0F1EE3  bnez t5, -4          # delay loop
+// 80000030  0803AF83  lw t6, 128(t2)       # le linha 2 (hart1)
+// 80000034  02000E93  addi t4, x0, 0x20    # esperado
+// 80000038  05DF9263  bne t6, t4, +68  -> FAIL
+// 8000003C  00100E93  addi t4, x0, 1
+// 80000040  01D32023  sw t4, 0(t1)         # TOHOST = 1
+// 80000044  0000006F  jal x0, 0            # spin
+// 80000048  02000E13  addi t3, x0, 0x20
+// 8000004C  09C3A023  sw t3, 128(t2)       # linha 2 = 0x20
+// 80000050  02100E13  addi t3, x0, 0x21
+// 80000054  0DC3A023  sw t3, 192(t2)       # linha 3 = 0x21
+// 80000058  06400F13  addi t5, x0, 100     # delay counter
+// 8000005C  FFFF0F13  addi t5, t5, -1
+// 80000060  FE0F1EE3  bnez t5, -4          # delay loop
+// 80000064  0003AF83  lw t6, 0(t2)         # le linha 0 (hart0)
+// 80000068  01000E93  addi t4, x0, 0x10    # esperado
+// 8000006C  01DF9863  bne t6, t4, +16  -> FAIL
+// 80000070  00100E93  addi t4, x0, 1
+// 80000074  01D32023  sw t4, 0(t1)         # TOHOST = 1
+// 80000078  0000006F  jal x0, 0            # spin
+// 8000007C  0000006F  jal x0, 0            # FAIL spin
+00002397
+00010317
+F4C30313
+F14022F3
+02029C63
+01000E13
+01C3A023
+01100E13
+05C3A023
+0C800F13
+FFFF0F13
+FE0F1EE3
+0803AF83
+02000E93
+05DF9263
+00100E93
+01D32023
+0000006F
+02000E13
+09C3A023
+02100E13
+0DC3A023
+06400F13
+FFFF0F13
+FE0F1EE3
+0003AF83
+01000E93
+01DF9863
+00100E93
+01D32023
+0000006F
+0000006F

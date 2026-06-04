@@ -1,0 +1,62 @@
+// B1 - LR.W atomico (RISC-V A extension) - teste basico
+//
+// Verifica se Load-Reserved nao crasha o xsim e retorna valor correto via
+// shadow_mem. Sem testar reservation set ainda (so LR, sem SC) — primeiro
+// confirma que o caminho atomic de load funciona.
+//
+//   Hart 0: SW DATA=0x123 -> LR.W DATA -> verifica valor -> TOHOST
+//   Hart 1: delay -> LR.W DATA -> verifica que ve hart0's value -> TOHOST
+//
+// Layout:
+//   0x80002000  DATA   (palavra atomica)
+//   0x8000FF50  TOHOST
+//
+// Programa:
+//   0x80000000  00002397  auipc t2, 2          ; t2 = 0x80002000
+//   0x80000004  00010317  auipc t1, 0x10       ; t1 = 0x80010004
+//   0x80000008  F4C30313  addi  t1, t1, -180   ; t1 = 0x8000FF50
+//   0x8000000C  F14022F3  csrr  t0, mhartid
+//   0x80000010  02029263  bnez  t0, +36        ; hart1 -> 0x80000034
+//   // --- HART 0 (8 instructions) ---
+//   0x80000014  12300E13  addi  t3, x0, 0x123  ; magic
+//   0x80000018  01C3A023  sw    t3, 0(t2)      ; DATA = 0x123 (SW normal)
+//   0x8000001C  1003AFAF  lr.w  t6, 0(t2)      ; LR.W t6 = MEM[t2]
+//   0x80000020  03CF9C63  bne   t6, t3, +56    ; se mismatch -> 0x80000058
+//   0x80000024  00100E93  addi  t4, x0, 1
+//   0x80000028  01D32023  sw    t4, 0(t1)      ; TOHOST = 1
+//   0x8000002C  0000006F  jal   x0, 0          ; spin success
+//   0x80000030  0000006F  jal   x0, 0          ; padding
+//   // --- HART 1 (10 instructions) ---
+//   0x80000034  06400F13  addi  t5, x0, 100    ; delay counter
+//   0x80000038  FFFF0F13  addi  t5, t5, -1
+//   0x8000003C  FE0F1EE3  bnez  t5, -4         ; loop ate 0
+//   0x80000040  1003AFAF  lr.w  t6, 0(t2)      ; LR.W (deve ver 0x123)
+//   0x80000044  12300E13  addi  t3, x0, 0x123  ; expected
+//   0x80000048  01CF9863  bne   t6, t3, +16    ; mismatch -> 0x80000058
+//   0x8000004C  00100E93  addi  t4, x0, 1
+//   0x80000050  01D32023  sw    t4, 0(t1)      ; TOHOST = 1
+//   0x80000054  0000006F  jal   x0, 0          ; spin success
+//   0x80000058  0000006F  jal   x0, 0          ; fail hang (timeout)
+00002397
+00010317
+F4C30313
+F14022F3
+02029263
+12300E13
+01C3A023
+1003AFAF
+03CF9C63
+00100E93
+01D32023
+0000006F
+0000006F
+06400F13
+FFFF0F13
+FE0F1EE3
+1003AFAF
+12300E13
+01CF9863
+00100E93
+01D32023
+0000006F
+0000006F

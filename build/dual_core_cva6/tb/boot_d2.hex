@@ -1,0 +1,61 @@
+// boot_d2.hex - Memory barrier (fence variants w,w / r,r / rw,rw)
+// Hart 0: SW DATA, fence.w,w, SW FLAG, fence.rw,rw, tohost
+// Hart 1: poll FLAG, fence.r,r, LW DATA, validar, tohost
+//
+// 80000000  00010417  auipc s0, 0x10       # s0 = 0x80010000
+// 80000004  F5040413  addi s0, s0, -176    # s0 = 0x8000FF50 (tohost)
+// 80000008  F14022F3  csrr t0, mhartid
+// 8000000C  02029A63  bnez t0, +52 -> 0x80000040
+// 80000010  00040393  addi t2, s0, 0       # t2 = tohost (provisorio)
+// 80000014  00002397  auipc t2, 2
+// 80000018  FEC38393  addi t2, t2, -20   # t2 = 0x80002000 (DATA)
+// 8000001C  6AA00E13  addi t3, x0, 0x6AA   # DATA valor (cabe 12-bit signed)
+// 80000020  01C3A023  sw t3, 0(t2)         # DATA = 0x6AA
+// 80000024  0110000F  fence w,w            # variante 1
+// 80000028  00100E93  addi t4, x0, 1
+// 8000002C  05D3A023  sw t4, 0x40(t2)      # FLAG = 1
+// 80000030  0330000F  fence rw,rw          # variante 2
+// 80000034  01D42023  sw t4, 0(s0)         # TOHOST hart 0
+// 80000038  0000006F  jal x0, 0            # spin success
+// 8000003C  0000006F  jal x0, 0  # padding
+// 80000040  00002397  auipc t2, 2
+// 80000044  FC038393  addi t2, t2, -64  # t2 = 0x80002000 (DATA)
+// 80000048  0403AF83  lw t6, 0x40(t2)      # poll FLAG
+// 8000004C  FE0F8EE3  beqz t6, -4   # loop ate FLAG=1
+// 80000050  0220000F  fence r,r            # variante 3
+// 80000054  0003AF83  lw t6, 0(t2)         # le DATA
+// 80000058  6AA00E93  addi t4, x0, 0x6AA
+// 8000005C  01DF9663  bne t6, t4, +12      # FAIL se valor errado
+// 80000060  00100313  addi t1, x0, 1
+// 80000064  00642023  sw t1, 0(s0)         # TOHOST hart 1
+// 80000068  0000006F  jal x0, 0            # spin success
+// 8000006C  0000006F  jal x0, 0            # FAIL spin
+//
+00010417
+F5040413
+F14022F3
+02029A63
+00040393
+00002397
+FEC38393
+6AA00E13
+01C3A023
+0110000F
+00100E93
+05D3A023
+0330000F
+01D42023
+0000006F
+0000006F
+00002397
+FC038393
+0403AF83
+FE0F8EE3
+0220000F
+0003AF83
+6AA00E93
+01DF9663
+00100313
+00642023
+0000006F
+0000006F
